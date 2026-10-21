@@ -5,7 +5,7 @@
     android:height="200dp"
     android:viewportWidth="240"
     android:viewportHeight="200">
-    <path android:fillColor="#140F766E" android:pathData="M76,188a44,6 0,1 0,88 0a44,6 0,1 0,-88 0z" />
+    <path android:fillColor="#141462A0" android:pathData="M76,188a44,6 0,1 0,88 0a44,6 0,1 0,-88 0z" />
     <!-- Escudo -->
     <path
         android:fillColor="#F59E0B"
@@ -22,7 +22,7 @@
         android:strokeLineJoin="round"
         android:pathData="M96,98L113,115L145,80" />
     <!-- Destellos -->
-    <path android:fillColor="#0F766E" android:pathData="M44,58L47,67L56,70L47,73L44,82L41,73L32,70L41,67Z" />
-    <path android:fillColor="#5EBFB0" android:pathData="M196,128L198,134L204,136L198,138L196,144L194,138L188,136L194,134Z" />
-    <path android:fillColor="#5EBFB0" android:pathData="M188,40L189.5,44.5L194,46L189.5,47.5L188,52L186.5,47.5L182,46L186.5,44.5Z" />
+    <path android:fillColor="#1462A0" android:pathData="M44,58L47,67L56,70L47,73L44,82L41,73L32,70L41,67Z" />
+    <path android:fillColor="#4A9BD1" android:pathData="M196,128L198,134L204,136L198,138L196,144L194,138L188,136L194,134Z" />
+    <path android:fillColor="#4A9BD1" android:pathData="M188,40L189.5,44.5L194,46L189.5,47.5L188,52L186.5,47.5L182,46L186.5,44.5Z" />
 </vector>

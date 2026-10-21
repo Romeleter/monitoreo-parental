@@ -18,20 +18,16 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Block
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -63,6 +59,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.proyectointegrador.monitoreo.MonitoreoApp
+import com.proyectointegrador.monitoreo.ui.componentes.EncabezadoMarca
 import com.proyectointegrador.monitoreo.ui.formatearMinutos
 import com.proyectointegrador.monitoreo.ui.theme.ColoresEstado
 import com.proyectointegrador.monitoreo.ui.theme.Marca
@@ -97,7 +94,6 @@ private fun etiquetaLarga(fecha: LocalDate, hoy: LocalDate) =
     if (fecha == hoy) "Hoy" else fecha.format(formatoFecha).replaceFirstChar { it.uppercase() }
 
 /** Pantalla de historial semanal (HU-04: RF-08, RF-09, RF-23, RF-25, RF-27, RF-30). */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PantallaHistorial(
     onAtras: () -> Unit,
@@ -108,14 +104,10 @@ fun PantallaHistorial(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Últimos 7 días") },
-                navigationIcon = {
-                    IconButton(onClick = onAtras) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
-                    }
-                },
-            )
+            Column {
+                EncabezadoMarca(onAtras = onAtras)
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            }
         },
     ) { padding ->
         val lista = historial ?: return@Scaffold
@@ -125,9 +117,12 @@ fun PantallaHistorial(
 
         LazyColumn(
             modifier = Modifier.padding(padding),
-            contentPadding = PaddingValues(16.dp),
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
+            item {
+                Text("Últimos 7 días", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+            }
             item {
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     items(lista, key = { it.app.paquete }) { h ->

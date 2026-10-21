@@ -29,6 +29,6 @@
         android:strokeLineCap="round"
         android:pathData="M120,98Q108,118 124,134T112,166" />
     <path android:fillColor="#E07A5F" android:pathData="M114,112L124,108L120,118Z" />
-    <path android:fillColor="#0F766E" android:pathData="M120,136L130,132L126,142Z" />
+    <path android:fillColor="#1462A0" android:pathData="M120,136L130,132L126,142Z" />
     <path android:fillColor="#E07A5F" android:pathData="M112,154L122,150L118,160Z" />
 </vector>

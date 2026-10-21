@@ -29,7 +29,6 @@ import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material.icons.filled.PlayCircle
-import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -57,6 +56,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
+import com.proyectointegrador.monitoreo.R
 import com.proyectointegrador.monitoreo.ui.theme.Marca
 
 /*
@@ -86,20 +86,17 @@ fun EncabezadoMarca(
             }
             Spacer(Modifier.width(4.dp))
         }
-        Box(
-            Modifier
-                .size(34.dp)
-                .background(MaterialTheme.colorScheme.primary, CircleShape),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(Icons.Default.Shield, contentDescription = null, tint = Color.White, modifier = Modifier.size(18.dp))
-        }
+        Image(
+            painterResource(R.drawable.logo_simbolo),
+            contentDescription = null,
+            modifier = Modifier.height(36.dp),
+        )
         Spacer(Modifier.width(10.dp))
         Text(
             "Monitoreo Parental",
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.weight(1f),
         )
         derecha()
@@ -283,7 +280,7 @@ fun NotaGris(icono: ImageVector, texto: String, modifier: Modifier = Modifier) {
 
 /** Panel de color suave con una ilustración centrada. */
 @Composable
-fun PanelIlustracion(@DrawableRes ilustracion: Int, modifier: Modifier = Modifier, alto: Dp = 190.dp, fondo: Color = Marca.menta) {
+fun PanelIlustracion(@DrawableRes ilustracion: Int, modifier: Modifier = Modifier, alto: Dp = 190.dp, fondo: Color = Marca.celeste) {
     Box(
         modifier
             .fillMaxWidth()
@@ -326,7 +323,7 @@ fun IconoApp(paquete: String, modifier: Modifier = Modifier, tamano: Dp = 44.dp)
             modifier
                 .size(tamano)
                 .clip(RoundedCornerShape(12.dp))
-                .background(Marca.menta),
+                .background(Marca.celeste),
             contentAlignment = Alignment.Center,
         ) {
             Icon(iconoDeRespaldo(paquete), contentDescription = null, tint = MaterialTheme.colorScheme.primary)

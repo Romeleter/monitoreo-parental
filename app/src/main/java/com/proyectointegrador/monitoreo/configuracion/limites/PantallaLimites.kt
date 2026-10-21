@@ -113,7 +113,7 @@ private fun Instrucciones() {
     Row(
         Modifier
             .fillMaxWidth()
-            .background(Marca.menta, RoundedCornerShape(14.dp))
+            .background(Marca.celeste, RoundedCornerShape(14.dp))
             .padding(14.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {

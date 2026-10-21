@@ -28,10 +28,10 @@
         android:strokeLineCap="round"
         android:pathData="M20,172H240" />
     <!-- Taza con vapor -->
-    <path android:fillColor="#0F766E" android:pathData="M38,134H74V158Q74,170 62,170H50Q38,170 38,158Z" />
+    <path android:fillColor="#1462A0" android:pathData="M38,134H74V158Q74,170 62,170H50Q38,170 38,158Z" />
     <path
         android:fillColor="#00000000"
-        android:strokeColor="#0F766E"
+        android:strokeColor="#1462A0"
         android:strokeWidth="5"
         android:pathData="M74,142Q86,142 86,151Q86,160 74,160" />
     <path
@@ -42,7 +42,7 @@
         android:pathData="M50,126Q45,117 51,109Q57,101 52,92M62,126Q57,118 63,111" />
     <!-- Planta -->
     <path android:fillColor="#34A88F" android:pathData="M216,140Q196,120 202,94Q222,110 216,140Z" />
-    <path android:fillColor="#0F766E" android:pathData="M216,140Q226,112 246,104Q242,128 216,140Z" />
+    <path android:fillColor="#178F8A" android:pathData="M216,140Q226,112 246,104Q242,128 216,140Z" />
     <path android:fillColor="#5EBFB0" android:pathData="M216,140Q200,134 186,124Q204,120 216,140Z" />
     <path android:fillColor="#F59E0B" android:pathData="M198,138H234L228,170H204Z" />
     <path android:fillColor="#D98A07" android:pathData="M198,138H234L233,144H199Z" />

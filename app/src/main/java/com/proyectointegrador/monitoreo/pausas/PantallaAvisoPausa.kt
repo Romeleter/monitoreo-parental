@@ -44,8 +44,8 @@ import kotlinx.coroutines.delay
 enum class MotivoPausa { LIMITE, BLOQUEO_MANUAL }
 
 private val FondoAviso = Color(0xFFFAF8F4)
-private val TintaAviso = Color(0xFF23302E)
-private val TextoAviso = Color(0xFF55615F)
+private val TintaAviso = Color(0xFF1F2A37)
+private val TextoAviso = Color(0xFF556170)
 private val BotonEsperaFondo = Color(0xFFDDE3E8)
 private val BotonEsperaTexto = Color(0xFF3F4A57)
 

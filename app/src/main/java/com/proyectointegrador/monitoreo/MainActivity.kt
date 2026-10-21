@@ -7,16 +7,22 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.proyectointegrador.monitoreo.pausas.ServicioVigilancia
 import com.proyectointegrador.monitoreo.ui.NavegacionApp
 import com.proyectointegrador.monitoreo.ui.theme.TemaMonitoreo
 
 /** Única actividad de la app: dibuja las pantallas de Compose. */
 class MainActivity : ComponentActivity() {
+    /** La pantalla de inicio se mantiene mientras se consulta si ya hay un perfil. */
+    private var cargando = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen().setKeepOnScreenCondition { cargando }
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         val app = application as MonitoreoApp
@@ -29,7 +35,10 @@ class MainActivity : ComponentActivity() {
                     value = app.db.perfilDao().obtenerPerfil() != null
                 }
                 Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    yaVinculado?.let { NavegacionApp(yaVinculado = it) }
+                    yaVinculado?.let {
+                        LaunchedEffect(Unit) { cargando = false }
+                        NavegacionApp(yaVinculado = it)
+                    }
                 }
             }
         }

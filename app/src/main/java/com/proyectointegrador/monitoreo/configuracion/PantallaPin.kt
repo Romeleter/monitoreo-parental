@@ -75,7 +75,7 @@ fun PantallaPin(onCorrecto: () -> Unit) {
             Box(
                 Modifier
                     .size(88.dp)
-                    .background(Marca.menta, CircleShape),
+                    .background(Marca.celeste, CircleShape),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(Icons.Outlined.Lock, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(40.dp))

@@ -6,7 +6,7 @@
     android:viewportWidth="240"
     android:viewportHeight="200">
     <!-- Sombra -->
-    <path android:fillColor="#140F766E" android:pathData="M64,186a56,7 0,1 0,112 0a56,7 0,1 0,-112 0z" />
+    <path android:fillColor="#141462A0" android:pathData="M64,186a56,7 0,1 0,112 0a56,7 0,1 0,-112 0z" />
     <!-- Teléfono -->
     <path android:fillColor="#2F3E46" android:pathData="M94,18H146A14,14 0,0 1,160 32V168A14,14 0,0 1,146 182H94A14,14 0,0 1,80 168V32A14,14 0,0 1,94 18Z" />
     <path android:fillColor="#FFFFFF" android:pathData="M94,28H146A8,8 0,0 1,154 36V164A8,8 0,0 1,146 172H94A8,8 0,0 1,86 164V36A8,8 0,0 1,94 28Z" />
@@ -19,10 +19,10 @@
     <path android:fillColor="#CBD5D2" android:pathData="M102,94H138A3,3 0,0 1,141 97A3,3 0,0 1,138 100H102A3,3 0,0 1,99 97A3,3 0,0 1,102 94Z" />
     <path android:fillColor="#E3E9E7" android:pathData="M108,105H132A2,2 0,0 1,134 107A2,2 0,0 1,132 109H108A2,2 0,0 1,106 107A2,2 0,0 1,108 105Z" />
     <!-- Campos del formulario -->
-    <path android:fillColor="#E6F6F3" android:pathData="M98,120H142A4,4 0,0 1,146 124V132A4,4 0,0 1,142 136H98A4,4 0,0 1,94 132V124A4,4 0,0 1,98 120Z" />
-    <path android:fillColor="#0F766E" android:pathData="M100,128a3,3 0,1 0,6 0a3,3 0,1 0,-6 0z" />
-    <path android:fillColor="#E6F6F3" android:pathData="M98,142H142A4,4 0,0 1,146 146V154A4,4 0,0 1,142 158H98A4,4 0,0 1,94 154V146A4,4 0,0 1,98 142Z" />
-    <path android:fillColor="#0F766E" android:pathData="M100,150a3,3 0,1 0,6 0a3,3 0,1 0,-6 0z" />
+    <path android:fillColor="#EAF3FB" android:pathData="M98,120H142A4,4 0,0 1,146 124V132A4,4 0,0 1,142 136H98A4,4 0,0 1,94 132V124A4,4 0,0 1,98 120Z" />
+    <path android:fillColor="#1462A0" android:pathData="M100,128a3,3 0,1 0,6 0a3,3 0,1 0,-6 0z" />
+    <path android:fillColor="#EAF3FB" android:pathData="M98,142H142A4,4 0,0 1,146 146V154A4,4 0,0 1,142 158H98A4,4 0,0 1,94 154V146A4,4 0,0 1,98 142Z" />
+    <path android:fillColor="#1462A0" android:pathData="M100,150a3,3 0,1 0,6 0a3,3 0,1 0,-6 0z" />
     <!-- Reloj flotante -->
     <path android:fillColor="#F59E0B" android:pathData="M50,58a18,18 0,1 0,36 0a18,18 0,1 0,-36 0z" />
     <path
@@ -43,7 +43,7 @@
         android:strokeColor="#DCE3E1"
         android:strokeWidth="1.5"
         android:pathData="M166,98H204A8,8 0,0 1,212 106V122A8,8 0,0 1,204 130H166A8,8 0,0 1,158 122V106A8,8 0,0 1,166 98Z" />
-    <path android:fillColor="#0F766E" android:pathData="M164,114a8,8 0,1 0,16 0a8,8 0,1 0,-16 0z" />
+    <path android:fillColor="#1462A0" android:pathData="M164,114a8,8 0,1 0,16 0a8,8 0,1 0,-16 0z" />
     <path
         android:fillColor="#00000000"
         android:strokeColor="#FFFFFF"

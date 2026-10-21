@@ -427,7 +427,7 @@ private fun NumeroEnCirculo(numero: Int) {
     Box(
         Modifier
             .size(28.dp)
-            .background(Marca.menta, CircleShape),
+            .background(Marca.celeste, CircleShape),
         contentAlignment = Alignment.Center,
     ) {
         Text(

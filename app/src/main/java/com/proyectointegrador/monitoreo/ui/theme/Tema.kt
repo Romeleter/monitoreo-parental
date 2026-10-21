@@ -12,26 +12,28 @@ import androidx.compose.ui.text.font.FontWeight
 import com.proyectointegrador.monitoreo.R
 
 private val Colores = lightColorScheme(
-    primary = Color(0xFF0F766E),
+    // Azul oscuro, azul claro y turquesa tomados del logo oficial.
+    primary = Color(0xFF1462A0),
     onPrimary = Color.White,
-    primaryContainer = Color(0xFFCCEFE9),
-    onPrimaryContainer = Color(0xFF00332D),
+    primaryContainer = Color(0xFFD6E8F6),
+    onPrimaryContainer = Color(0xFF0B2E4F),
     secondary = Color(0xFFD97706),
-    secondaryContainer = Color(0xFFD7EFEA),
-    onSecondaryContainer = Color(0xFF00332D),
-    background = Color(0xFFF4F6F6),
-    onBackground = Color(0xFF1E2A28),
-    surface = Color(0xFFF4F6F6),
-    onSurface = Color(0xFF1E2A28),
-    surfaceVariant = Color(0xFFE2E8E6),
-    onSurfaceVariant = Color(0xFF4B5755),
+    secondaryContainer = Color(0xFFDCEBF7),
+    onSecondaryContainer = Color(0xFF0B2E4F),
+    tertiary = Color(0xFF1DB2AE),
+    background = Color(0xFFF4F6F9),
+    onBackground = Color(0xFF1C2733),
+    surface = Color(0xFFF4F6F9),
+    onSurface = Color(0xFF1C2733),
+    surfaceVariant = Color(0xFFE1E7EE),
+    onSurfaceVariant = Color(0xFF4A5562),
     surfaceContainerLowest = Color.White,
-    surfaceContainerLow = Color(0xFFFAFBFB),
+    surfaceContainerLow = Color(0xFFFAFBFC),
     surfaceContainer = Color.White,
     surfaceContainerHigh = Color.White,
-    surfaceContainerHighest = Color(0xFFE2E8E6),
-    outline = Color(0xFF6F7B79),
-    outlineVariant = Color(0xFFDCE3E1),
+    surfaceContainerHighest = Color(0xFFE1E7EE),
+    outline = Color(0xFF6E7987),
+    outlineVariant = Color(0xFFD9E0E8),
     error = Color(0xFFB91C1C),
     errorContainer = Color(0xFFFDECEC),
     onErrorContainer = Color(0xFF5F1111),
@@ -41,7 +43,7 @@ private val Colores = lightColorScheme(
 object Marca {
     /** Tarjetas blancas con borde suave, como en los mockups. */
     val tarjeta = Color.White
-    val bordeTarjeta = Color(0xFFE1E7E5)
+    val bordeTarjeta = Color(0xFFE0E6EE)
 
     /** Tarjetas informativas color crema (avisos de permisos, privacidad, actualización). */
     val cremaFondo = Color(0xFFFFF7EC)
@@ -49,9 +51,9 @@ object Marca {
     val ambar = Color(0xFFD97706)
     val textoCrema = Color(0xFF5B3A0C)
 
-    /** Fondo menta del perfil activo y de los paneles de ilustración. */
-    val menta = Color(0xFFE6F6F3)
-    val textoSecundario = Color(0xFF5F6B69)
+    /** Fondo celeste del perfil activo y de los paneles de ilustración. */
+    val celeste = Color(0xFFEAF3FB)
+    val textoSecundario = Color(0xFF5B6673)
 }
 
 /** Colores de los estados de uso en el resumen del día (pantalla 5). */

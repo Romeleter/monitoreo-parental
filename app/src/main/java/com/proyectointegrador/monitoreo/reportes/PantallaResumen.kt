@@ -213,7 +213,7 @@ private fun TarjetaPerfil(perfil: String, ultimaActualizacion: Long?) {
     Column(
         Modifier
             .fillMaxWidth()
-            .background(Marca.menta, RoundedCornerShape(16.dp))
+            .background(Marca.celeste, RoundedCornerShape(16.dp))
             .padding(horizontal = 18.dp, vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(2.dp),
     ) {
@@ -338,7 +338,7 @@ private fun IconoEnCirculo(icono: ImageVector) {
     Box(
         Modifier
             .size(36.dp)
-            .background(Marca.menta, CircleShape),
+            .background(Marca.celeste, CircleShape),
         contentAlignment = Alignment.Center,
     ) {
         Icon(icono, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
@@ -364,7 +364,7 @@ private fun TarjetaPausas(pausas: Int, ultimoReconocimiento: Long?) {
         Row(
             Modifier
                 .fillMaxWidth()
-                .background(Marca.menta, RoundedCornerShape(12.dp))
+                .background(Marca.celeste, RoundedCornerShape(12.dp))
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(10.dp),
