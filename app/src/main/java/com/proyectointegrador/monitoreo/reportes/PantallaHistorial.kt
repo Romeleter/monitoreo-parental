@@ -1,8 +1,9 @@
 package com.proyectointegrador.monitoreo.reportes
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,8 +21,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Block
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -43,13 +44,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.text.drawText
-import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -59,26 +64,34 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.proyectointegrador.monitoreo.MonitoreoApp
+import com.proyectointegrador.monitoreo.data.PerfilDao
 import com.proyectointegrador.monitoreo.ui.componentes.EncabezadoMarca
+import com.proyectointegrador.monitoreo.ui.componentes.TarjetaBlanca
 import com.proyectointegrador.monitoreo.ui.formatearMinutos
 import com.proyectointegrador.monitoreo.ui.theme.ColoresEstado
 import com.proyectointegrador.monitoreo.ui.theme.Marca
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-class HistorialViewModel(generador: GeneradorReporte) : ViewModel() {
+class HistorialViewModel(generador: GeneradorReporte, perfilDao: PerfilDao) : ViewModel() {
     val historial: StateFlow<List<HistorialApp>?> = generador.historialSemanal()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
+    /** Nombre del niño o niña, para la frase de resumen. */
+    val nombre: StateFlow<String?> = perfilDao.observarPerfil()
+        .map { it?.nombre }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     companion object {
         val Factory = viewModelFactory {
             initializer {
                 val app = this[APPLICATION_KEY] as MonitoreoApp
-                HistorialViewModel(app.generadorReporte)
+                HistorialViewModel(app.generadorReporte, app.db.perfilDao())
             }
         }
     }
@@ -93,13 +106,17 @@ private fun etiquetaCorta(fecha: LocalDate, hoy: LocalDate) =
 private fun etiquetaLarga(fecha: LocalDate, hoy: LocalDate) =
     if (fecha == hoy) "Hoy" else fecha.format(formatoFecha).replaceFirstChar { it.uppercase() }
 
-/** Pantalla de historial semanal (HU-04: RF-08, RF-09, RF-23, RF-25, RF-27, RF-30). */
+/**
+ * Pantalla de historial semanal (HU-04). Primero la conclusión, luego el gráfico y los datos clave;
+ * la lista día por día queda plegada para quien la quiera.
+ */
 @Composable
 fun PantallaHistorial(
     onAtras: () -> Unit,
     vm: HistorialViewModel = viewModel(factory = HistorialViewModel.Factory),
 ) {
     val historial by vm.historial.collectAsStateWithLifecycle()
+    val nombre by vm.nombre.collectAsStateWithLifecycle()
     var paqueteElegido by rememberSaveable { mutableStateOf<String?>(null) }
 
     Scaffold(
@@ -134,67 +151,106 @@ fun PantallaHistorial(
                     }
                 }
             }
-            item { TarjetaGrafico(elegido, hoy) }
-            item { TarjetaResumenSemana(elegido) }
-            item { TarjetaTablaDias(elegido, hoy) }
+            item { TarjetaSemana(elegido, hoy, nombre ?: "Su hijo o hija") }
+            item { SeccionDiaPorDia(elegido, hoy) }
         }
     }
 }
 
-/** RF-08 + RF-09: barras por día, línea del límite y días que llegaron al límite en rojo. */
+/** Resumen (RF-09, RF-25), gráfico (RF-08, RF-30) y datos clave (RF-23, RF-24) en una sola tarjeta. */
 @Composable
-private fun TarjetaGrafico(historial: HistorialApp, hoy: LocalDate) {
-    var diaElegido by rememberSaveable(historial.app.paquete) { mutableStateOf(historial.dias.lastIndex) }
-    val dia = historial.dias[diaElegido.coerceIn(historial.dias.indices)]
+private fun TarjetaSemana(h: HistorialApp, hoy: LocalDate, nombre: String) {
+    var diaElegido by rememberSaveable(h.app.paquete) { mutableStateOf(h.dias.lastIndex) }
+    val dia = h.dias[diaElegido.coerceIn(h.dias.indices)]
 
-    Card(
-        Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Marca.tarjeta),
-        border = BorderStroke(1.dp, Marca.bordeTarjeta),
-    ) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text("Tiempo en ${historial.app.nombre} por día", style = MaterialTheme.typography.titleMedium)
+    TarjetaBlanca {
+        FraseResumen(h, nombre)
 
-            GraficoBarras(
-                dias = historial.dias,
-                elegido = diaElegido,
-                onElegir = { diaElegido = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(180.dp)
-                    .semantics {
-                        contentDescription = "Gráfico de barras del uso de ${historial.app.nombre} en los últimos 7 días"
-                    },
-            )
-            Row(Modifier.fillMaxWidth()) {
-                historial.dias.forEachIndexed { i, d ->
-                    Text(
-                        etiquetaCorta(d.fecha, hoy),
-                        modifier = Modifier.weight(1f),
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = if (i == diaElegido) FontWeight.Bold else FontWeight.Normal,
-                        color = if (i == diaElegido) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
+        GraficoBarras(
+            dias = h.dias,
+            elegido = diaElegido,
+            onElegir = { diaElegido = it },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(170.dp)
+                .semantics {
+                    contentDescription = "Gráfico de barras del uso de ${h.app.nombre} en los últimos 7 días"
+                },
+        )
+        Row(Modifier.fillMaxWidth()) {
+            h.dias.forEachIndexed { i, d ->
+                Text(
+                    etiquetaCorta(d.fecha, hoy),
+                    modifier = Modifier.weight(1f),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = if (i == diaElegido) FontWeight.Bold else FontWeight.Normal,
+                    color = if (i == diaElegido) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
+        }
 
-            // Detalle del día tocado (equivalente táctil al "pasar el mouse" de un gráfico web).
+        // Detalle del día tocado en el gráfico.
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             Text(
                 "${etiquetaLarga(dia.fecha, hoy)}: ${formatearMinutos(dia.minutos)} de ${formatearMinutos(dia.limite)}",
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.weight(1f),
             )
-            if (dia.llegoAlLimite) EstadoLimite(llego = true)
-
-            Leyenda()
-            Text(
-                "Toque una barra para ver el detalle de ese día.",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
+            if (dia.llegoAlLimite) {
+                Icon(Icons.Default.Block, contentDescription = null, tint = ColoresEstado.alcanzado, modifier = Modifier.size(16.dp))
+                Text("Llegó al límite", style = MaterialTheme.typography.labelMedium, color = ColoresEstado.alcanzado)
+            }
         }
+        Leyenda()
+
+        HorizontalDivider(color = Marca.bordeTarjeta)
+        Row(Modifier.fillMaxWidth()) {
+            DatoClave("Entre semana", "${formatearMinutos(h.promedioEntreSemana)}/día", Modifier.weight(1f))
+            DatoClave("Fin de semana", "${formatearMinutos(h.promedioFinDeSemana)}/día", Modifier.weight(1f))
+            DatoClave("Avisos de pausa", "${h.avisosSemana}", Modifier.weight(1f))
+        }
+    }
+}
+
+/** La conclusión de la semana en una frase, con ícono y texto para no depender solo del color. */
+@Composable
+private fun FraseResumen(h: HistorialApp, nombre: String) {
+    val llego = h.diasConLimite > 0
+    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        Icon(
+            if (llego) Icons.Default.Block else Icons.Default.CheckCircle,
+            contentDescription = null,
+            tint = if (llego) ColoresEstado.alcanzado else ColoresEstado.dentro,
+            modifier = Modifier
+                .padding(top = 2.dp)
+                .size(22.dp),
+        )
+        Text(
+            buildAnnotatedString {
+                if (llego) {
+                    append("Esta semana $nombre llegó al límite de ${h.app.nombre} ")
+                    withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                        append("${h.diasConLimite} de ${h.dias.size} días")
+                    }
+                    append(" (${h.porcentajeDiasConLimite} %).")
+                } else {
+                    append("Esta semana $nombre se mantuvo ")
+                    withStyle(SpanStyle(fontWeight = FontWeight.Bold)) { append("dentro del límite") }
+                    append(" de ${h.app.nombre} todos los días.")
+                }
+            },
+            style = MaterialTheme.typography.titleMedium,
+        )
+    }
+}
+
+@Composable
+private fun DatoClave(etiqueta: String, valor: String, modifier: Modifier = Modifier) {
+    Column(modifier, verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        Text(valor, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+        Text(etiqueta, style = MaterialTheme.typography.bodySmall, color = Marca.textoSecundario)
     }
 }
 
@@ -242,7 +298,7 @@ private fun GraficoBarras(
                     topLeft = Offset(x - 3.dp.toPx(), minOf(top, size.height - 4.dp.toPx()) - 3.dp.toPx()),
                     size = Size(anchoBarra + 6.dp.toPx(), size.height - minOf(top, size.height - 4.dp.toPx()) + 3.dp.toPx()),
                     cornerRadius = CornerRadius(6.dp.toPx()),
-                    style = androidx.compose.ui.graphics.drawscope.Stroke(width = 1.5.dp.toPx()),
+                    style = Stroke(width = 1.5.dp.toPx()),
                 )
             }
             // Línea del límite de ese día (RF-30): punteada sobre cada columna.
@@ -278,11 +334,19 @@ private fun DrawScope.dibujarBarra(color: Color, x: Float, top: Float, ancho: Fl
     drawPath(path, color)
 }
 
+/** Solo lo que no se explica solo: el rojo y la línea punteada. */
 @Composable
 private fun Leyenda() {
     Row(horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.CenterVertically) {
-        ItemLeyenda(MaterialTheme.colorScheme.primary, "Tiempo usado")
-        ItemLeyenda(ColoresEstado.alcanzado, "Llegó al límite")
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            Box(
+                Modifier
+                    .size(10.dp)
+                    .clip(RoundedCornerShape(2.dp))
+                    .background(ColoresEstado.alcanzado),
+            )
+            Text("Llegó al límite", style = MaterialTheme.typography.labelSmall, color = Marca.textoSecundario)
+        }
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             Canvas(Modifier.size(width = 16.dp, height = 2.dp)) {
                 drawLine(
@@ -293,133 +357,49 @@ private fun Leyenda() {
                     pathEffect = PathEffect.dashPathEffect(floatArrayOf(4.dp.toPx(), 3.dp.toPx())),
                 )
             }
-            Text("Límite", style = MaterialTheme.typography.labelSmall)
+            Text("Límite diario", style = MaterialTheme.typography.labelSmall, color = Marca.textoSecundario)
         }
     }
 }
 
+/** Los mismos datos del gráfico en forma de lista, plegados para no recargar la pantalla. */
 @Composable
-private fun ItemLeyenda(color: Color, texto: String) {
-    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-        Box(
-            Modifier
-                .size(10.dp)
-                .clip(RoundedCornerShape(2.dp))
-                .background(color),
-        )
-        Text(texto, style = MaterialTheme.typography.labelSmall)
-    }
-}
-
-@Composable
-private fun EstadoLimite(llego: Boolean) {
-    val (icono, texto, color) = if (llego) {
-        Triple(Icons.Default.Block, "Llegó al límite", ColoresEstado.alcanzado)
-    } else {
-        Triple(Icons.Default.CheckCircle, "Dentro del límite", ColoresEstado.dentro)
-    }
-    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-        Icon(icono, contentDescription = null, tint = color, modifier = Modifier.size(18.dp))
-        Text(texto, color = color, style = MaterialTheme.typography.bodyMedium)
-    }
-}
-
-/** RF-30, RF-25, RF-23 y RF-27: resumen de la semana en frases simples. */
-@Composable
-private fun TarjetaResumenSemana(h: HistorialApp) {
-    val limiteActual = h.app.limiteDiarioMin
-    Card(
-        Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Marca.tarjeta),
-        border = BorderStroke(1.dp, Marca.bordeTarjeta),
-    ) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text("Resumen de la semana", style = MaterialTheme.typography.titleMedium)
-
-            // RF-30: límite frente al uso real, con dos barras comparables.
-            BarraComparacion("Límite por día", limiteActual, maxOf(limiteActual, h.promedioDiario), Color.Gray)
-            BarraComparacion(
-                "Uso promedio por día",
-                h.promedioDiario,
-                maxOf(limiteActual, h.promedioDiario),
-                if (h.promedioDiario >= limiteActual) ColoresEstado.alcanzado else MaterialTheme.colorScheme.primary,
-            )
-
-            HorizontalDivider()
-            val estilo = MaterialTheme.typography.bodyMedium
-            // RF-25
-            Text("Llegó al límite ${h.diasConLimite} de ${h.dias.size} días (${h.porcentajeDiasConLimite} %).", style = estilo)
-            // RF-23
-            Text("Entre semana: ${formatearMinutos(h.promedioEntreSemana)} por día.", style = estilo)
-            Text("Fin de semana: ${formatearMinutos(h.promedioFinDeSemana)} por día.", style = estilo)
-            Text("Total de la semana: ${formatearMinutos(h.totalMinutos)}.", style = estilo)
-            Text("Avisos de pausa: ${h.avisosSemana}.", style = estilo)
-        }
-    }
-}
-
-@Composable
-private fun BarraComparacion(titulo: String, minutos: Int, maximo: Int, color: Color) {
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Row {
-            Text(titulo, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
-            Text(formatearMinutos(minutos), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
-        }
-        Box(
+private fun SeccionDiaPorDia(h: HistorialApp, hoy: LocalDate) {
+    var abierta by rememberSaveable { mutableStateOf(false) }
+    TarjetaBlanca(relleno = 0.dp) {
+        Row(
             Modifier
                 .fillMaxWidth()
-                .height(10.dp)
-                .clip(RoundedCornerShape(4.dp))
-                .background(MaterialTheme.colorScheme.surfaceVariant),
+                .clickable { abierta = !abierta }
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            val fraccion = if (maximo == 0) 0f else minutos.toFloat() / maximo
-            if (fraccion > 0f) {
-                Box(
-                    Modifier
-                        .fillMaxWidth(fraccion)
-                        .height(10.dp)
-                        .clip(RoundedCornerShape(4.dp))
-                        .background(color),
-                )
-            }
+            Text("Ver día por día", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
+            Icon(
+                if (abierta) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
+                contentDescription = if (abierta) "Ocultar" else "Mostrar",
+            )
         }
-    }
-}
-
-/** Los mismos datos del gráfico en forma de lista (para quien prefiera leerlos así). */
-@Composable
-private fun TarjetaTablaDias(h: HistorialApp, hoy: LocalDate) {
-    Card(
-        Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Marca.tarjeta),
-        border = BorderStroke(1.dp, Marca.bordeTarjeta),
-    ) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("Día por día", style = MaterialTheme.typography.titleMedium)
-            h.dias.asReversed().forEach { dia ->
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        etiquetaLarga(dia.fecha, hoy),
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.weight(1f),
-                    )
-                    if (dia.llegoAlLimite) {
-                        Icon(
-                            Icons.Default.Block,
-                            contentDescription = "Llegó al límite",
-                            tint = ColoresEstado.alcanzado,
-                            modifier = Modifier
-                                .padding(end = 8.dp)
-                                .size(18.dp),
-                        )
+        AnimatedVisibility(abierta) {
+            Column(
+                Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                h.dias.asReversed().forEach { dia ->
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(etiquetaLarga(dia.fecha, hoy), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
+                        if (dia.llegoAlLimite) {
+                            Icon(
+                                Icons.Default.Block,
+                                contentDescription = "Llegó al límite",
+                                tint = ColoresEstado.alcanzado,
+                                modifier = Modifier
+                                    .padding(end = 8.dp)
+                                    .size(18.dp),
+                            )
+                        }
+                        Text(formatearMinutos(dia.minutos), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
                     }
-                    Text(
-                        formatearMinutos(dia.minutos),
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.SemiBold,
-                    )
                 }
             }
         }
