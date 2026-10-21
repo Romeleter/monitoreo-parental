@@ -1,0 +1,265 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "b70fa8a77ffaae224c2636d4dab697e0",
+    "entities": [
+      {
+        "tableName": "perfil_menor",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `nombre` TEXT NOT NULL, `edad` INTEGER NOT NULL, `pinPadreHash` TEXT NOT NULL, `fechaVinculacion` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nombre",
+            "columnName": "nombre",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "edad",
+            "columnName": "edad",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pinPadreHash",
+            "columnName": "pinPadreHash",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fechaVinculacion",
+            "columnName": "fechaVinculacion",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "app_monitoreada",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`paquete` TEXT NOT NULL, `perfilId` INTEGER NOT NULL, `nombre` TEXT NOT NULL, `limiteDiarioMin` INTEGER NOT NULL, `monitoreoActivo` INTEGER NOT NULL, `bloqueoManual` INTEGER NOT NULL, PRIMARY KEY(`paquete`), FOREIGN KEY(`perfilId`) REFERENCES `perfil_menor`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "paquete",
+            "columnName": "paquete",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "perfilId",
+            "columnName": "perfilId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nombre",
+            "columnName": "nombre",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "limiteDiarioMin",
+            "columnName": "limiteDiarioMin",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "monitoreoActivo",
+            "columnName": "monitoreoActivo",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bloqueoManual",
+            "columnName": "bloqueoManual",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "paquete"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_app_monitoreada_perfilId",
+            "unique": false,
+            "columnNames": [
+              "perfilId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_app_monitoreada_perfilId` ON `${TABLE_NAME}` (`perfilId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "perfil_menor",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "perfilId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "registro_uso",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `paquete` TEXT NOT NULL, `fecha` TEXT NOT NULL, `minutosUso` INTEGER NOT NULL, `activacionesAviso` INTEGER NOT NULL, FOREIGN KEY(`paquete`) REFERENCES `app_monitoreada`(`paquete`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "paquete",
+            "columnName": "paquete",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fecha",
+            "columnName": "fecha",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "minutosUso",
+            "columnName": "minutosUso",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "activacionesAviso",
+            "columnName": "activacionesAviso",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_registro_uso_paquete_fecha",
+            "unique": true,
+            "columnNames": [
+              "paquete",
+              "fecha"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_registro_uso_paquete_fecha` ON `${TABLE_NAME}` (`paquete`, `fecha`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "app_monitoreada",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "paquete"
+            ],
+            "referencedColumns": [
+              "paquete"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "aviso_pausa",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `paquete` TEXT NOT NULL, `mensaje` TEXT NOT NULL, `tiempoEsperaSeg` INTEGER NOT NULL, `momentoMostrado` INTEGER NOT NULL, `momentoReconocimiento` INTEGER, FOREIGN KEY(`paquete`) REFERENCES `app_monitoreada`(`paquete`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "paquete",
+            "columnName": "paquete",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mensaje",
+            "columnName": "mensaje",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tiempoEsperaSeg",
+            "columnName": "tiempoEsperaSeg",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "momentoMostrado",
+            "columnName": "momentoMostrado",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "momentoReconocimiento",
+            "columnName": "momentoReconocimiento",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_aviso_pausa_paquete",
+            "unique": false,
+            "columnNames": [
+              "paquete"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_aviso_pausa_paquete` ON `${TABLE_NAME}` (`paquete`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "app_monitoreada",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "paquete"
+            ],
+            "referencedColumns": [
+              "paquete"
+            ]
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b70fa8a77ffaae224c2636d4dab697e0')"
+    ]
+  }
+}
