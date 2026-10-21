@@ -64,6 +64,11 @@ data class RegistroUso(
     val fecha: String,
     val minutosUso: Int = 0,
     val activacionesAviso: Int = 0,
+    /**
+     * Límite que tenía la app ese día. Se guarda para que el historial semanal (RF-09)
+     * no cambie si el padre modifica el límite después. null en registros antiguos.
+     */
+    val limiteMin: Int? = null,
 )
 
 /** Cada vez que se muestra el aviso de pausa al niño (RF-13, RF-16). */

@@ -67,11 +67,11 @@ class ServicioDeteccion(private val context: Context, private val db: AppDatabas
         }
 
     private suspend fun actualizarDia(dia: LocalDate, zona: ZoneId) {
-        val paquetes = db.appMonitoreadaDao().observarTodas().first()
+        val limitePorPaquete = db.appMonitoreadaDao().observarTodas().first()
             .filter { it.monitoreoActivo }
-            .map { it.paquete }
-            .toSet()
-        if (paquetes.isEmpty()) return
+            .associate { it.paquete to it.limiteDiarioMin }
+        if (limitePorPaquete.isEmpty()) return
+        val paquetes = limitePorPaquete.keys
 
         val inicio = dia.atStartOfDay(zona).toInstant().toEpochMilli()
         val finDelDia = dia.plusDays(1).atStartOfDay(zona).toInstant().toEpochMilli()
@@ -86,7 +86,7 @@ class ServicioDeteccion(private val context: Context, private val db: AppDatabas
         )
         paquetes.forEach { paquete ->
             val minutos = CalculadoraUso.aMinutos(usoPorApp[paquete] ?: 0L)
-            db.registroUsoDao().guardarMinutos(paquete, dia.toString(), minutos)
+            db.registroUsoDao().guardarMinutos(paquete, dia.toString(), minutos, limitePorPaquete.getValue(paquete))
         }
     }
 

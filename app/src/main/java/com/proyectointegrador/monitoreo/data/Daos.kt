@@ -50,17 +50,24 @@ interface RegistroUsoDao {
     @Query("SELECT * FROM registro_uso WHERE fecha = :fecha")
     fun observarDelDia(fecha: String): Flow<List<RegistroUso>>
 
-    @Query("UPDATE registro_uso SET minutosUso = :minutos WHERE paquete = :paquete AND fecha = :fecha")
-    suspend fun actualizarMinutos(paquete: String, fecha: String, minutos: Int): Int
+    /** Registros entre dos fechas ISO "aaaa-mm-dd", ambas incluidas (historial semanal). */
+    @Query("SELECT * FROM registro_uso WHERE fecha BETWEEN :desde AND :hasta")
+    fun observarEntre(desde: String, hasta: String): Flow<List<RegistroUso>>
+
+    @Query(
+        "UPDATE registro_uso SET minutosUso = :minutos, limiteMin = :limite " +
+            "WHERE paquete = :paquete AND fecha = :fecha",
+    )
+    suspend fun actualizarMinutos(paquete: String, fecha: String, minutos: Int, limite: Int): Int
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertar(registro: RegistroUso)
 
-    /** Crea el registro del día si no existe, o actualiza sus minutos si ya existe. */
+    /** Crea el registro del día si no existe, o actualiza sus minutos y su límite si ya existe. */
     @Transaction
-    suspend fun guardarMinutos(paquete: String, fecha: String, minutos: Int) {
-        if (actualizarMinutos(paquete, fecha, minutos) == 0) {
-            insertar(RegistroUso(paquete = paquete, fecha = fecha, minutosUso = minutos))
+    suspend fun guardarMinutos(paquete: String, fecha: String, minutos: Int, limite: Int) {
+        if (actualizarMinutos(paquete, fecha, minutos, limite) == 0) {
+            insertar(RegistroUso(paquete = paquete, fecha = fecha, minutosUso = minutos, limiteMin = limite))
         }
     }
 

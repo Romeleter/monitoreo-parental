@@ -51,4 +51,14 @@ class GeneradorReporte(private val db: AppDatabase) {
             )
         }
     }
+
+    /** Historial de los últimos 7 días por app (HU-04). */
+    fun historialSemanal(): Flow<List<HistorialApp>> {
+        val hoy = LocalDate.now()
+        val fechas = CalculadoraHistorial.fechas(hoy)
+        return combine(
+            db.appMonitoreadaDao().observarTodas(),
+            db.registroUsoDao().observarEntre(fechas.first().toString(), fechas.last().toString()),
+        ) { apps, registros -> CalculadoraHistorial.armar(apps, registros, hoy) }
+    }
 }

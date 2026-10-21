@@ -23,6 +23,7 @@ import com.proyectointegrador.monitoreo.configuracion.vinculacion.PantallaPermis
 import com.proyectointegrador.monitoreo.configuracion.vinculacion.PantallaVinculacionExitosa
 import com.proyectointegrador.monitoreo.configuracion.vinculacion.VinculacionViewModel
 import com.proyectointegrador.monitoreo.pausas.ServicioVigilancia
+import com.proyectointegrador.monitoreo.reportes.PantallaHistorial
 import com.proyectointegrador.monitoreo.reportes.PantallaResumen
 
 /** Nombres de las pantallas de la app. */
@@ -34,9 +35,10 @@ object Rutas {
     const val PIN = "pin"
     const val RESUMEN = "resumen"
     const val LIMITES = "limites"
+    const val HISTORIAL = "historial"
 
     /** Pantallas del modo padre: se bloquean con PIN al salir de la app. */
-    val MODO_PADRE = setOf(RESUMEN, LIMITES)
+    val MODO_PADRE = setOf(RESUMEN, LIMITES, HISTORIAL)
 }
 
 /**
@@ -96,10 +98,16 @@ fun NavegacionApp(yaVinculado: Boolean) {
             PantallaPin(onCorrecto = { nav.navigate(Rutas.RESUMEN) { popUpTo(Rutas.PIN) { inclusive = true } } })
         }
         composable(Rutas.RESUMEN) {
-            PantallaResumen(onConfigurarLimites = { nav.navigate(Rutas.LIMITES) })
+            PantallaResumen(
+                onConfigurarLimites = { nav.navigate(Rutas.LIMITES) },
+                onVerHistorial = { nav.navigate(Rutas.HISTORIAL) },
+            )
         }
         composable(Rutas.LIMITES) {
             PantallaLimites(onAtras = { nav.popBackStack() })
+        }
+        composable(Rutas.HISTORIAL) {
+            PantallaHistorial(onAtras = { nav.popBackStack() })
         }
     }
 }

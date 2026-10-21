@@ -10,7 +10,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 /** Base de datos local. Todo se guarda solo en el dispositivo del menor. */
 @Database(
     entities = [PerfilMenor::class, AppMonitoreada::class, RegistroUso::class, AvisoPausa::class],
-    version = 2,
+    version = 3,
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun perfilDao(): PerfilDao
@@ -21,7 +21,7 @@ abstract class AppDatabase : RoomDatabase() {
     companion object {
         fun crear(context: Context): AppDatabase =
             Room.databaseBuilder(context, AppDatabase::class.java, "monitoreo.db")
-                .addMigrations(MIGRACION_1_2)
+                .addMigrations(MIGRACION_1_2, MIGRACION_2_3)
                 .build()
 
         /** Versión 2: se agrega aviso_pausa.momentoCierre. */
@@ -32,6 +32,13 @@ abstract class AppDatabase : RoomDatabase() {
                     "UPDATE aviso_pausa SET momentoCierre = " +
                         "COALESCE(momentoReconocimiento, momentoMostrado)",
                 )
+            }
+        }
+
+        /** Versión 3: se agrega registro_uso.limiteMin (límite de cada día). */
+        private val MIGRACION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE registro_uso ADD COLUMN limiteMin INTEGER")
             }
         }
     }
