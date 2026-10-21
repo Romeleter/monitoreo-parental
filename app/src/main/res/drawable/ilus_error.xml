@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ilustración de "Permiso necesario": teléfono con alerta y un interruptor apagado. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="240dp"
+    android:height="200dp"
+    android:viewportWidth="240"
+    android:viewportHeight="200">
+    <path android:fillColor="#14C0392B" android:pathData="M64,186a56,7 0,1 0,112 0a56,7 0,1 0,-112 0z" />
+    <path android:fillColor="#2F3E46" android:pathData="M96,16H144A14,14 0,0 1,158 30V168A14,14 0,0 1,144 182H96A14,14 0,0 1,82 168V30A14,14 0,0 1,96 16Z" />
+    <path android:fillColor="#FFF4F2" android:pathData="M96,26H144A8,8 0,0 1,152 34V164A8,8 0,0 1,144 172H96A8,8 0,0 1,88 164V34A8,8 0,0 1,96 26Z" />
+    <path android:fillColor="#2F3E46" android:pathData="M112,30H128A2,2 0,0 1,130 32A2,2 0,0 1,128 34H112A2,2 0,0 1,110 32A2,2 0,0 1,112 30Z" />
+    <!-- Alerta -->
+    <path android:fillColor="#E25546" android:pathData="M96,96a24,24 0,1 0,48 0a24,24 0,1 0,-48 0z" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="6"
+        android:strokeLineCap="round"
+        android:pathData="M120,84V100" />
+    <path android:fillColor="#FFFFFF" android:pathData="M116.5,110a3.5,3.5 0,1 0,7 0a3.5,3.5 0,1 0,-7 0z" />
+    <path android:fillColor="#F3D6D1" android:pathData="M104,138H136A3,3 0,0 1,139 141A3,3 0,0 1,136 144H104A3,3 0,0 1,101 141A3,3 0,0 1,104 138Z" />
+    <path android:fillColor="#F3D6D1" android:pathData="M110,150H130A2.5,2.5 0,0 1,132.5 152.5A2.5,2.5 0,0 1,130 155H110A2.5,2.5 0,0 1,107.5 152.5A2.5,2.5 0,0 1,110 150Z" />
+    <!-- Interruptor apagado -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#DCE3E1"
+        android:strokeWidth="1.5"
+        android:pathData="M152,126H206A10,10 0,0 1,216 136V154A10,10 0,0 1,206 164H152A10,10 0,0 1,142 154V136A10,10 0,0 1,152 126Z" />
+    <path android:fillColor="#CBD5D2" android:pathData="M153,141H169A2.5,2.5 0,0 1,171.5 143.5A2.5,2.5 0,0 1,169 146H153A2.5,2.5 0,0 1,150.5 143.5A2.5,2.5 0,0 1,153 141Z" />
+    <path android:fillColor="#CBD5D2" android:pathData="M185,137H199A8,8 0,0 1,207 145A8,8 0,0 1,199 153H185A8,8 0,0 1,177 145A8,8 0,0 1,185 137Z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M179.5,145a5.5,5.5 0,1 0,11 0a5.5,5.5 0,1 0,-11 0z" />
+</vector>

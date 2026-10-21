@@ -14,6 +14,13 @@
     <!-- Para volver a iniciar la vigilancia cuando se enciende el teléfono. -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <!-- Para mostrar el ícono real de las apps monitoreadas si están instaladas. -->
+    <queries>
+        <package android:name="com.zhiliaoapp.musically" />
+        <package android:name="com.instagram.android" />
+        <package android:name="com.google.android.youtube" />
+    </queries>
+
     <application
         android:name=".MonitoreoApp"
         android:allowBackup="false"

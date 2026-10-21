@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ilustración de "Aún no hay actividad hoy": cometa en el cielo sobre una colina. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="240dp"
+    android:height="200dp"
+    android:viewportWidth="240"
+    android:viewportHeight="200">
+    <!-- Sol -->
+    <path android:fillColor="#FCD34D" android:pathData="M176,44a16,16 0,1 0,32 0a16,16 0,1 0,-32 0z" />
+    <!-- Nube -->
+    <path android:fillColor="#FFFFFF" android:pathData="M30,74A12,12 0,0 1,42 62A16,16 0,0 1,72 58A12,12 0,0 1,86 74Z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M172,108A9,9 0,0 1,181 99A12,12 0,0 1,203 96A9,9 0,0 1,214 108Z" />
+    <!-- Colina -->
+    <path android:fillColor="#B9E4DA" android:pathData="M0,200V176Q60,150 120,164T240,158V200Z" />
+    <!-- Cometa -->
+    <path android:fillColor="#F59E0B" android:pathData="M120,26L150,60L120,98L90,60Z" />
+    <path android:fillColor="#D98A07" android:pathData="M120,26L150,60H120Z" />
+    <path android:fillColor="#D98A07" android:pathData="M120,98L90,60H120Z" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#2F3E46"
+        android:strokeWidth="1.5"
+        android:pathData="M120,26V98M90,60H150" />
+    <!-- Cola -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#2F3E46"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M120,98Q108,118 124,134T112,166" />
+    <path android:fillColor="#E07A5F" android:pathData="M114,112L124,108L120,118Z" />
+    <path android:fillColor="#0F766E" android:pathData="M120,136L130,132L126,142Z" />
+    <path android:fillColor="#E07A5F" android:pathData="M112,154L122,150L118,160Z" />
+</vector>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ilustración del paso "Datos": teléfono con el perfil del niño y un reloj. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="240dp"
+    android:height="200dp"
+    android:viewportWidth="240"
+    android:viewportHeight="200">
+    <!-- Sombra -->
+    <path android:fillColor="#140F766E" android:pathData="M64,186a56,7 0,1 0,112 0a56,7 0,1 0,-112 0z" />
+    <!-- Teléfono -->
+    <path android:fillColor="#2F3E46" android:pathData="M94,18H146A14,14 0,0 1,160 32V168A14,14 0,0 1,146 182H94A14,14 0,0 1,80 168V32A14,14 0,0 1,94 18Z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M94,28H146A8,8 0,0 1,154 36V164A8,8 0,0 1,146 172H94A8,8 0,0 1,86 164V36A8,8 0,0 1,94 28Z" />
+    <path android:fillColor="#2F3E46" android:pathData="M112,32H128A2,2 0,0 1,130 34A2,2 0,0 1,128 36H112A2,2 0,0 1,110 34A2,2 0,0 1,112 32Z" />
+    <!-- Avatar -->
+    <path android:fillColor="#FCE3D9" android:pathData="M101,66a19,19 0,1 0,38 0a19,19 0,1 0,-38 0z" />
+    <path android:fillColor="#E07A5F" android:pathData="M113,61a7,7 0,1 0,14 0a7,7 0,1 0,-14 0z" />
+    <path android:fillColor="#E07A5F" android:pathData="M107,80Q108,70 120,70Q132,70 133,80Q127,85 120,85Q113,85 107,80Z" />
+    <!-- Líneas del nombre -->
+    <path android:fillColor="#CBD5D2" android:pathData="M102,94H138A3,3 0,0 1,141 97A3,3 0,0 1,138 100H102A3,3 0,0 1,99 97A3,3 0,0 1,102 94Z" />
+    <path android:fillColor="#E3E9E7" android:pathData="M108,105H132A2,2 0,0 1,134 107A2,2 0,0 1,132 109H108A2,2 0,0 1,106 107A2,2 0,0 1,108 105Z" />
+    <!-- Campos del formulario -->
+    <path android:fillColor="#E6F6F3" android:pathData="M98,120H142A4,4 0,0 1,146 124V132A4,4 0,0 1,142 136H98A4,4 0,0 1,94 132V124A4,4 0,0 1,98 120Z" />
+    <path android:fillColor="#0F766E" android:pathData="M100,128a3,3 0,1 0,6 0a3,3 0,1 0,-6 0z" />
+    <path android:fillColor="#E6F6F3" android:pathData="M98,142H142A4,4 0,0 1,146 146V154A4,4 0,0 1,142 158H98A4,4 0,0 1,94 154V146A4,4 0,0 1,98 142Z" />
+    <path android:fillColor="#0F766E" android:pathData="M100,150a3,3 0,1 0,6 0a3,3 0,1 0,-6 0z" />
+    <!-- Reloj flotante -->
+    <path android:fillColor="#F59E0B" android:pathData="M50,58a18,18 0,1 0,36 0a18,18 0,1 0,-36 0z" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.5"
+        android:pathData="M58,58a10,10 0,1 0,20 0a10,10 0,1 0,-20 0z" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M68,52V58L72,61" />
+    <!-- Tarjeta flotante con visto bueno -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#DCE3E1"
+        android:strokeWidth="1.5"
+        android:pathData="M166,98H204A8,8 0,0 1,212 106V122A8,8 0,0 1,204 130H166A8,8 0,0 1,158 122V106A8,8 0,0 1,166 98Z" />
+    <path android:fillColor="#0F766E" android:pathData="M164,114a8,8 0,1 0,16 0a8,8 0,1 0,-16 0z" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M168.5,114L171,116.5L175.5,111.5" />
+    <path android:fillColor="#CBD5D2" android:pathData="M186,110H202A2,2 0,0 1,204 112A2,2 0,0 1,202 114H186A2,2 0,0 1,184 112A2,2 0,0 1,186 110Z" />
+    <path android:fillColor="#E3E9E7" android:pathData="M186,117H198A2,2 0,0 1,200 119A2,2 0,0 1,198 121H186A2,2 0,0 1,184 119A2,2 0,0 1,186 117Z" />
+</vector>

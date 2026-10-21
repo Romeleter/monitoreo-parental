@@ -31,8 +31,8 @@ data class DatosMenorUi(
     /** Los errores solo se muestran después de pulsar "Continuar" la primera vez. */
     val mostrarErrores: Boolean = false,
 ) {
-    val errorNombre: String? get() = if (nombre.isBlank()) "Escribe el nombre del niño o niña" else null
-    val errorEdad: String? get() = if (edad == null) "Elige la edad" else null
+    val errorNombre: String? get() = if (nombre.isBlank()) "Escriba el nombre del niño o niña" else null
+    val errorEdad: String? get() = if (edad == null) "Elija la edad" else null
     val errorPin: String? get() = if (!PinSeguro.esValido(pin)) "El PIN debe tener 4 números" else null
     val errorConfirmacion: String? get() = if (pinConfirmacion != pin) "Los PIN no coinciden" else null
 

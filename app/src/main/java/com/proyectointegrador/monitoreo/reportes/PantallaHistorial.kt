@@ -1,5 +1,6 @@
 package com.proyectointegrador.monitoreo.reportes
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -21,6 +22,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Block
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
@@ -63,6 +65,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.proyectointegrador.monitoreo.MonitoreoApp
 import com.proyectointegrador.monitoreo.ui.formatearMinutos
 import com.proyectointegrador.monitoreo.ui.theme.ColoresEstado
+import com.proyectointegrador.monitoreo.ui.theme.Marca
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -149,7 +152,12 @@ private fun TarjetaGrafico(historial: HistorialApp, hoy: LocalDate) {
     var diaElegido by rememberSaveable(historial.app.paquete) { mutableStateOf(historial.dias.lastIndex) }
     val dia = historial.dias[diaElegido.coerceIn(historial.dias.indices)]
 
-    Card(Modifier.fillMaxWidth()) {
+    Card(
+        Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Marca.tarjeta),
+        border = BorderStroke(1.dp, Marca.bordeTarjeta),
+    ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text("Tiempo en ${historial.app.nombre} por día", style = MaterialTheme.typography.titleMedium)
 
@@ -187,7 +195,7 @@ private fun TarjetaGrafico(historial: HistorialApp, hoy: LocalDate) {
 
             Leyenda()
             Text(
-                "Toca una barra para ver el detalle de ese día.",
+                "Toque una barra para ver el detalle de ese día.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -325,7 +333,12 @@ private fun EstadoLimite(llego: Boolean) {
 @Composable
 private fun TarjetaResumenSemana(h: HistorialApp) {
     val limiteActual = h.app.limiteDiarioMin
-    Card(Modifier.fillMaxWidth()) {
+    Card(
+        Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Marca.tarjeta),
+        border = BorderStroke(1.dp, Marca.bordeTarjeta),
+    ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text("Resumen de la semana", style = MaterialTheme.typography.titleMedium)
 
@@ -382,7 +395,12 @@ private fun BarraComparacion(titulo: String, minutos: Int, maximo: Int, color: C
 /** Los mismos datos del gráfico en forma de lista (para quien prefiera leerlos así). */
 @Composable
 private fun TarjetaTablaDias(h: HistorialApp, hoy: LocalDate) {
-    Card(Modifier.fillMaxWidth()) {
+    Card(
+        Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Marca.tarjeta),
+        border = BorderStroke(1.dp, Marca.bordeTarjeta),
+    ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text("Día por día", style = MaterialTheme.typography.titleMedium)
             h.dias.asReversed().forEach { dia ->

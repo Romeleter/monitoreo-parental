@@ -39,7 +39,7 @@ class LimitesViewModel(private val gestor: GestorLimites) : ViewModel() {
         val lista = _limites.value
         viewModelScope.launch {
             if (!lista.todosValidos()) {
-                _mensajes.send("Revisa los valores marcados en rojo")
+                _mensajes.send("Revise los valores marcados en rojo")
                 return@launch
             }
             lista.forEach { gestor.guardarLimite(it.paquete, it.valor!!, it.monitoreoActivo) }

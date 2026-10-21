@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ilustración del aviso de pausa: ventana con sol, una taza caliente y una planta. Invita a descansar. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="260dp"
+    android:height="200dp"
+    android:viewportWidth="260"
+    android:viewportHeight="200">
+    <!-- Ventana -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#CBD5D2"
+        android:strokeWidth="2"
+        android:pathData="M78,16H182A8,8 0,0 1,190 24V120A8,8 0,0 1,182 128H78A8,8 0,0 1,70 120V24A8,8 0,0 1,78 16Z" />
+    <path android:fillColor="#DCEFF9" android:pathData="M80,26H180V118H80Z" />
+    <path android:fillColor="#FCD34D" android:pathData="M140,58a14,14 0,1 0,28 0a14,14 0,1 0,-28 0z" />
+    <path android:fillColor="#9ED9C8" android:pathData="M80,118V100Q104,82 130,96T180,90V118Z" />
+    <path android:fillColor="#5EBFB0" android:pathData="M80,118V108Q110,96 136,108T180,104V118Z" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="4"
+        android:pathData="M130,26V118M80,72H180" />
+    <!-- Repisa -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#CBD5D2"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:pathData="M20,172H240" />
+    <!-- Taza con vapor -->
+    <path android:fillColor="#0F766E" android:pathData="M38,134H74V158Q74,170 62,170H50Q38,170 38,158Z" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#0F766E"
+        android:strokeWidth="5"
+        android:pathData="M74,142Q86,142 86,151Q86,160 74,160" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#A9B6B3"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:pathData="M50,126Q45,117 51,109Q57,101 52,92M62,126Q57,118 63,111" />
+    <!-- Planta -->
+    <path android:fillColor="#34A88F" android:pathData="M216,140Q196,120 202,94Q222,110 216,140Z" />
+    <path android:fillColor="#0F766E" android:pathData="M216,140Q226,112 246,104Q242,128 216,140Z" />
+    <path android:fillColor="#5EBFB0" android:pathData="M216,140Q200,134 186,124Q204,120 216,140Z" />
+    <path android:fillColor="#F59E0B" android:pathData="M198,138H234L228,170H204Z" />
+    <path android:fillColor="#D98A07" android:pathData="M198,138H234L233,144H199Z" />
+</vector>
