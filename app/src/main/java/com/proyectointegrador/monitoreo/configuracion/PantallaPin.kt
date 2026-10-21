@@ -80,9 +80,14 @@ fun PantallaPin(onCorrecto: () -> Unit) {
             ) {
                 Icon(Icons.Outlined.Lock, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(40.dp))
             }
-            Text("Modo padre", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
             Text(
-                "Escriba su PIN para ver el resumen y cambiar los límites.",
+                "Ingrese su PIN para continuar",
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+            )
+            Text(
+                "Así podrá ver el resumen y cambiar los límites.",
                 style = MaterialTheme.typography.bodyLarge,
                 color = Marca.textoSecundario,
                 textAlign = TextAlign.Center,

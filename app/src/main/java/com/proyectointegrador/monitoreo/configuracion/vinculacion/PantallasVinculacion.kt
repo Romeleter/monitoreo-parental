@@ -208,7 +208,7 @@ fun PantallaDatosMenor(vm: VinculacionViewModel, onContinuar: () -> Unit) {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             EtiquetaCampo(Icons.Outlined.Lock, "PIN del padre o madre")
             Text(
-                "Se pedirá para entrar al modo padre, así su hijo o hija no podrá cambiar los límites.",
+                "Se pedirá cada vez que abra la app, así su hijo o hija no podrá cambiar los límites.",
                 style = MaterialTheme.typography.bodySmall,
                 color = Marca.textoSecundario,
             )
