@@ -2,6 +2,7 @@ package com.proyectointegrador.monitoreo.reportes
 
 import com.proyectointegrador.monitoreo.data.AppDatabase
 import com.proyectointegrador.monitoreo.data.AppMonitoreada
+import com.proyectointegrador.monitoreo.data.AvisoPausa
 import com.proyectointegrador.monitoreo.data.PerfilMenor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -26,6 +27,8 @@ data class ResumenDelDia(
     val usos: List<UsoApp>,
     val pausasHoy: Int,
     val ultimoReconocimiento: Long?,
+    /** RF-29: veces que el niño volvió a abrir cada app después del primer aviso, solo las que tienen alguna. */
+    val intentosReapertura: List<Pair<AppMonitoreada, Int>>,
 ) {
     val hayActividad: Boolean get() = usos.any { it.minutos > 0 } || pausasHoy > 0
 }
@@ -48,6 +51,9 @@ class GeneradorReporte(private val db: AppDatabase) {
                 usos = apps.map { UsoApp(it, minutosPorApp[it.paquete] ?: 0) },
                 pausasHoy = avisos.size,
                 ultimoReconocimiento = avisos.mapNotNull { it.momentoReconocimiento }.maxOrNull(),
+                intentosReapertura = CalculadoraPausas.intentosDeReapertura(avisos).let { intentos ->
+                    apps.mapNotNull { app -> intentos[app.paquete]?.let { app to it } }
+                },
             )
         }
     }
@@ -61,4 +67,16 @@ class GeneradorReporte(private val db: AppDatabase) {
             db.registroUsoDao().observarEntre(fechas.first().toString(), fechas.last().toString()),
         ) { apps, registros -> CalculadoraHistorial.armar(apps, registros, hoy) }
     }
+}
+
+object CalculadoraPausas {
+    /**
+     * RF-29: el primer aviso del día de una app es cuando se alcanza el límite (o el niño la
+     * abre bloqueada). Cada aviso siguiente significa que volvió a abrirla, así que cuenta
+     * como un intento de reapertura. Solo devuelve las apps con al menos un intento.
+     */
+    fun intentosDeReapertura(avisosDelDia: List<AvisoPausa>): Map<String, Int> =
+        avisosDelDia.groupingBy { it.paquete }.eachCount()
+            .mapValues { it.value - 1 }
+            .filterValues { it > 0 }
 }

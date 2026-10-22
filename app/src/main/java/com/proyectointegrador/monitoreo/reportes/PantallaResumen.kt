@@ -24,6 +24,7 @@ import androidx.compose.material.icons.outlined.BarChart
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.PauseCircle
+import androidx.compose.material.icons.outlined.Replay
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material.icons.outlined.WarningAmber
@@ -200,7 +201,7 @@ fun PantallaResumen(
                     )
                 }
                 items(r.usos, key = { it.app.paquete }) { TarjetaUsoApp(it) }
-                item { TarjetaPausas(r.pausasHoy, r.ultimoReconocimiento) }
+                item { TarjetaPausas(r.pausasHoy, r.ultimoReconocimiento, r.intentosReapertura) }
             }
             item { BotonSecundario("Ver últimos 7 días", onClick = onVerHistorial, icono = Icons.Outlined.BarChart) }
             item { TarjetaBloqueoManual(r.usos.map { it.app }, onCambiar = vm::cambiarBloqueo) }
@@ -345,9 +346,9 @@ private fun IconoEnCirculo(icono: ImageVector) {
     }
 }
 
-/** Pausas de hoy (RF-24) y último reconocimiento del aviso (RF-16). */
+/** Pausas de hoy (RF-24), último reconocimiento del aviso (RF-16) e intentos de reapertura (RF-29). */
 @Composable
-private fun TarjetaPausas(pausas: Int, ultimoReconocimiento: Long?) {
+private fun TarjetaPausas(pausas: Int, ultimoReconocimiento: Long?, intentos: List<Pair<AppMonitoreada, Int>>) {
     TarjetaBlanca {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             IconoEnCirculo(Icons.Outlined.PauseCircle)
@@ -383,6 +384,18 @@ private fun TarjetaPausas(pausas: Int, ultimoReconocimiento: Long?) {
                 },
                 style = MaterialTheme.typography.bodyMedium,
             )
+        }
+        intentos.forEach { (app, veces) ->
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                Icon(Icons.Outlined.Replay, contentDescription = null, tint = Marca.ambar, modifier = Modifier.size(18.dp))
+                Text(
+                    buildAnnotatedString {
+                        append("Intentó volver a abrir ${app.nombre} ")
+                        withStyle(SpanStyle(fontWeight = FontWeight.Bold)) { append(if (veces == 1) "1 vez" else "$veces veces") }
+                    },
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+            }
         }
     }
 }
