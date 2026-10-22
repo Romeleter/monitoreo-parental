@@ -293,7 +293,7 @@ private fun EstadoSinActividad(nombre: String, onConfigurarLimites: () -> Unit) 
 private data class Estado(val color: Color, val icono: ImageVector, val texto: String)
 
 private fun estadoDe(uso: UsoApp): Estado = when {
-    uso.app.bloqueoManual -> Estado(ColoresEstado.alcanzado, Icons.Filled.Lock, "Bloqueada por usted")
+    uso.app.bloqueoManual -> Estado(ColoresEstado.alcanzado, Icons.Filled.Lock, "Bloqueada manualmente")
     !uso.app.monitoreoActivo -> Estado(Color(0xFF7A8583), Icons.Filled.PauseCircle, "Monitoreo en pausa")
     uso.estado == EstadoUso.ALCANZADO -> Estado(ColoresEstado.alcanzado, Icons.Filled.Block, "Límite alcanzado")
     uso.estado == EstadoUso.CERCA -> Estado(ColoresEstado.cerca, Icons.Filled.Warning, "Cerca del límite")

@@ -86,12 +86,6 @@ fun PantallaPin(onCorrecto: () -> Unit) {
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
             )
-            Text(
-                "Así podrá ver el resumen y cambiar los límites.",
-                style = MaterialTheme.typography.bodyLarge,
-                color = Marca.textoSecundario,
-                textAlign = TextAlign.Center,
-            )
             Spacer(Modifier.height(4.dp))
             CampoPin(
                 valor = pin,

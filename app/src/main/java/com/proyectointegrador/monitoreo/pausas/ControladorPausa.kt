@@ -154,9 +154,12 @@ class ControladorPausa(
         val evento = UsageEvents.Event()
         while (eventos.hasNextEvent()) {
             eventos.getNextEvent(evento)
-            when (evento.eventType) {
-                EVENTO_ABIERTA -> appEnPrimerPlano = evento.packageName
-                EVENTO_CERRADA -> if (evento.packageName == appEnPrimerPlano) appEnPrimerPlano = null
+            // Solo se mira qué app pasa al frente. Las pausas se ignoran: al cambiar de pantalla
+            // dentro de una misma app, Android pausa una y abre la otra, y el aviso parpadeaba.
+            // Los diálogos de permisos o de cuentas de Google salen encima de la app, así que
+            // tampoco cuentan como salir de ella.
+            if (evento.eventType == EVENTO_ABIERTA && evento.packageName !in PAQUETES_DE_APOYO) {
+                appEnPrimerPlano = evento.packageName
             }
         }
         ultimaConsulta = ahora
@@ -169,6 +172,12 @@ class ControladorPausa(
         private const val RECALCULAR_CADA_MS = 60_000L
         private const val MARGEN_TRAS_RECONOCER_MS = 3_000L
         private const val EVENTO_ABIERTA = 1
-        private const val EVENTO_CERRADA = 2
+
+        /** Pantallas del sistema que se abren encima de otra app sin que el niño haya salido de ella. */
+        private val PAQUETES_DE_APOYO = setOf(
+            "com.google.android.permissioncontroller",
+            "com.android.permissioncontroller",
+            "com.google.android.gms",
+        )
     }
 }
