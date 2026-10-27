@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Ilustración de "Vinculación exitosa": escudo con visto bueno. -->
+<!-- Ilustración de "Vinculación exitosa": escudo azul con un corazón y visto bueno. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="240dp"
     android:height="200dp"
@@ -8,19 +8,22 @@
     <path android:fillColor="#141462A0" android:pathData="M76,188a44,6 0,1 0,88 0a44,6 0,1 0,-88 0z" />
     <!-- Escudo -->
     <path
-        android:fillColor="#F59E0B"
-        android:strokeColor="#2F3E46"
-        android:strokeWidth="6"
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#2178DC"
+        android:strokeWidth="14"
         android:strokeLineJoin="round"
-        android:pathData="M120,20L170,38V92C170,130 148,158 120,174C92,158 70,130 70,92V38Z" />
-    <path android:fillColor="#D98A07" android:pathData="M120,28L76,43.5V92C76,126 95,151 120,166Z" />
+        android:pathData="M120,22Q145,36 170,42V92C170,130 148,158 120,174C92,158 70,130 70,92V42Q95,36 120,22Z" />
+    <!-- Corazón -->
+    <path
+        android:fillColor="#33B3A9"
+        android:pathData="M120,82C112,70 92,68 86,86C80,104 102,122 120,136C138,122 160,104 154,86C148,68 128,70 120,82Z" />
     <path
         android:fillColor="#00000000"
         android:strokeColor="#FFFFFF"
-        android:strokeWidth="13"
+        android:strokeWidth="8"
         android:strokeLineCap="round"
         android:strokeLineJoin="round"
-        android:pathData="M96,98L113,115L145,80" />
+        android:pathData="M104,102L115,113L137,91" />
     <!-- Destellos -->
     <path android:fillColor="#1462A0" android:pathData="M44,58L47,67L56,70L47,73L44,82L41,73L32,70L41,67Z" />
     <path android:fillColor="#4A9BD1" android:pathData="M196,128L198,134L204,136L198,138L196,144L194,138L188,136L194,134Z" />

@@ -385,12 +385,6 @@ private fun ColumnScope.ContenidoPermisos(
         if (pendiente == Permiso.SUPERPOSICION) GuiaPasos(INFO_PERMISO.getValue(Permiso.SUPERPOSICION))
     }
 
-    TarjetaCrema(
-        Icons.Outlined.Info,
-        "Solo medimos cuánto tiempo se usan las apps de video corto. No leemos mensajes ni fotos.",
-        titulo = "Privacidad garantizada",
-    )
-
     if (pendiente != null) {
         BotonPrincipal("Abrir ajustes de Android", onClick = abrirAjustes, conFlecha = true)
     }
