@@ -72,14 +72,19 @@ fun NavegacionApp(yaVinculado: Boolean) {
 
     NavHost(nav, startDestination = if (yaVinculado) Rutas.PIN else Rutas.DATOS) {
         composable(Rutas.DATOS) {
-            PantallaDatosMenor(vinculacion, onContinuar = { nav.navigate(Rutas.LIMITES_INICIALES) })
-        }
-        composable(Rutas.LIMITES_INICIALES) {
-            PantallaLimitesIniciales(vinculacion, onContinuar = { nav.navigate(Rutas.PERMISO) })
+            PantallaDatosMenor(vinculacion, onContinuar = { nav.navigate(Rutas.PERMISO) })
         }
         composable(Rutas.PERMISO) {
             PantallaPermiso(
-                onConcedido = {
+                // La pantalla de permisos se quita de la pila: si el padre vuelve atrás desde
+                // los límites llega a sus datos, en vez de rebotar en los permisos ya concedidos.
+                onConcedido = { nav.navigate(Rutas.LIMITES_INICIALES) { popUpTo(Rutas.PERMISO) { inclusive = true } } },
+            )
+        }
+        composable(Rutas.LIMITES_INICIALES) {
+            PantallaLimitesIniciales(
+                vinculacion,
+                onContinuar = {
                     vinculacion.vincular {
                         ServicioVigilancia.iniciar(context)
                         nav.navigate(Rutas.EXITO) { popUpTo(Rutas.DATOS) { inclusive = true } }

@@ -76,15 +76,15 @@ class VinculacionViewModel(private val db: AppDatabase) : ViewModel() {
     fun sumarLimite(paquete: String, delta: Int) = _limites.update { it.sumando(paquete, delta) }
     fun cambiarMonitoreo(paquete: String, activo: Boolean) = _limites.update { it.conMonitoreo(paquete, activo) }
 
-    /** Devuelve true si todos los límites están entre 1 y 300 y se puede pasar al paso de permisos. */
+    /** Devuelve true si todos los límites están entre 1 y 300 y se puede terminar la vinculación. */
     fun validarLimites(): Boolean {
         _mostrarErroresLimites.value = true
         return _limites.value.todosValidos()
     }
 
     /**
-     * Guarda el perfil y las apps monitoreadas. Según el diagrama de actividad,
-     * esto ocurre solo cuando el permiso ya fue concedido.
+     * Guarda el perfil y las apps monitoreadas al confirmar los límites, el último paso
+     * antes del éxito. Para entonces los permisos ya fueron concedidos.
      */
     fun vincular(alTerminar: () -> Unit) {
         if (vinculando) return

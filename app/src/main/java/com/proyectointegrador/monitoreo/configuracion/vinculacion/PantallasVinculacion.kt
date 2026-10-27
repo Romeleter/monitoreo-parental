@@ -92,8 +92,8 @@ private val EDADES = 5..12
 /** Los cuatro pasos de la vinculación (HU-05 / CU-01). */
 private val PASOS = listOf(
     Paso("Datos", Icons.Outlined.Person),
-    Paso("Límites", Icons.Outlined.Timer),
     Paso("Permisos", Icons.Outlined.Shield),
+    Paso("Límites", Icons.Outlined.Timer),
     Paso("Éxito", Icons.Outlined.CheckCircle),
 )
 
@@ -256,7 +256,7 @@ fun CampoPin(valor: String, onCambio: (String) -> Unit, etiqueta: String, error:
     )
 }
 
-/** Paso 2 — Límites de tiempo iniciales (HU-02 / CU-03). Solo aparece la primera vez. */
+/** Paso 3 — Límites de tiempo iniciales (HU-02 / CU-03). Solo aparece la primera vez. */
 @Composable
 fun PantallaLimitesIniciales(vm: VinculacionViewModel, onContinuar: () -> Unit) {
     val limites by vm.limites.collectAsStateWithLifecycle()
@@ -264,7 +264,7 @@ fun PantallaLimitesIniciales(vm: VinculacionViewModel, onContinuar: () -> Unit) 
     val datos by vm.datos.collectAsStateWithLifecycle()
     val nombre = datos.nombre.trim().ifEmpty { "su hijo o hija" }
 
-    PlantillaPaso(paso = 1) {
+    PlantillaPaso(paso = 2) {
         Titulo("¿Cuánto tiempo al día?")
         Subtitulo(
             "Elija cuántos minutos al día puede usar $nombre cada app, entre " +
@@ -309,7 +309,7 @@ private val INFO_PERMISO = mapOf(
     ),
 )
 
-/** Paso 3 — Permisos (2a) y permiso no concedido (2b). RF-11, RF-19. */
+/** Paso 2 — Permisos (2a) y permiso no concedido (2b). RF-11, RF-19. */
 @Composable
 fun PantallaPermiso(onConcedido: () -> Unit) {
     val context = LocalContext.current
@@ -356,7 +356,7 @@ fun PantallaPermiso(onConcedido: () -> Unit) {
         null -> false
     }
 
-    PlantillaPaso(paso = 2) {
+    PlantillaPaso(paso = 1) {
         if (pendiente != null && fallido) {
             ContenidoPermisoDenegado(INFO_PERMISO.getValue(pendiente), abrirAjustes)
         } else {
