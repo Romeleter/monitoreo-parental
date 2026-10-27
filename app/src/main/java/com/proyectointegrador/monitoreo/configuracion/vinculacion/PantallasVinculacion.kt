@@ -229,9 +229,9 @@ fun PantallaDatosMenor(vm: VinculacionViewModel, onContinuar: () -> Unit) {
         TarjetaCrema(
             Icons.Outlined.Info,
             buildAnnotatedString {
-                append("Para saber cuánto tiempo se usan los videos, la app necesitará permisos de Android como ")
+                append("Para saber cuánto tiempo pasa su hijo o hija viendo videos, la app necesitará permisos de Android como ")
                 withStyle(SpanStyle(fontWeight = FontWeight.Bold)) { append("«Acceso a datos de uso»") }
-                append(". No lee mensajes ni fotos.")
+                append(". La aplicación no lee mensajes ni fotos.")
             },
         )
 
