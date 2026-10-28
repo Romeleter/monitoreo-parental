@@ -265,6 +265,7 @@ private fun GraficoBarras(
     val colorLimite = MaterialTheme.colorScheme.onSurfaceVariant
     val colorEje = MaterialTheme.colorScheme.outlineVariant
     val colorElegido = MaterialTheme.colorScheme.onSurface
+    val colorFondoEtiqueta = Marca.tarjeta
     val medidorTexto = rememberTextMeasurer()
     val estiloEtiqueta = MaterialTheme.typography.labelSmall.copy(color = colorLimite)
 
@@ -312,10 +313,20 @@ private fun GraficoBarras(
             )
         }
 
-        // Valor del límite escrito sobre la línea, arriba a la izquierda (es la única escala que se necesita).
+        // Valor del límite de hoy escrito sobre su línea, al lado derecho (es la única escala que se necesita).
+        // Lleva fondo propio para que se lea aunque una barra alta pase por detrás.
         val limiteHoy = dias.last().limite
         val etiqueta = medidorTexto.measure("Límite: ${formatearMinutos(limiteHoy)}", estiloEtiqueta)
-        drawText(etiqueta, topLeft = Offset(2.dp.toPx(), (y(dias.first().limite) - etiqueta.size.height - 2.dp.toPx()).coerceAtLeast(0f)))
+        val margen = 4.dp.toPx()
+        val izquierda = size.width - etiqueta.size.width - margen
+        val arriba = (y(limiteHoy) - etiqueta.size.height - 2 * margen).coerceAtLeast(0f)
+        drawRoundRect(
+            color = colorFondoEtiqueta,
+            topLeft = Offset(izquierda - margen, arriba),
+            size = Size(etiqueta.size.width + 2 * margen, etiqueta.size.height + margen),
+            cornerRadius = CornerRadius(4.dp.toPx()),
+        )
+        drawText(etiqueta, topLeft = Offset(izquierda, arriba + margen / 2))
     }
 }
 
