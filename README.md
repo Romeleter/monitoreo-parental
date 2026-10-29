@@ -50,11 +50,25 @@ Aplicación Android para que los padres de familia monitoreen y controlen el con
 | `data/` | Base de datos (clases del diagrama de clases) | — |
 | `ui/` | Navegación, tema y componentes comunes | — |
 
-## Cómo ejecutarla
+## Instalación en un teléfono Android
+
+La aplicación se instala en el teléfono del niño o niña, que debe tener Android 8 o superior.
+
+1. Desde el teléfono, abrir el enlace de descarga del
+   [APK](https://github.com/Romeleter/monitoreo-parental/releases/download/v0.1.0/MonitoreoParental-v0.1.0.apk).
+2. Abrir el archivo descargado. Si Android pide permiso para "instalar aplicaciones desconocidas", activarlo y volver.
+3. Tocar "Instalar". Si Google Play Protect muestra una advertencia, elegir "Instalar de todas formas".
+4. Abrir Monitoreo Parental y seguir el registro: datos del niño, PIN, permisos y límites.
+
+El paso a paso completo, con capturas, está en el [manual de usuario](docs/Manual%20de%20usuario.pdf).
+
+## Ejecución desde el código fuente
+
+Para revisar o modificar el código:
 
 1. Abrir esta carpeta en Android Studio.
 2. Esperar a que termine "Gradle sync".
-3. Elegir un emulador o un celular Android conectado y pulsar ▶ Run.
+3. Conectar un teléfono Android con la depuración USB activada, o crear un emulador, y pulsar ▶ Run.
 
 ## Pruebas
 
