@@ -39,17 +39,6 @@ Aplicación Android para que los padres de familia monitoreen y controlen el con
 - JUnit 4 (pruebas unitarias)
 - Android 8.0 (API 26) como versión mínima
 
-## Módulos
-
-| Carpeta | Módulo | Historias de usuario |
-|---|---|---|
-| `configuracion/` | Configuración parental: vinculación, PIN y límites | HU-02, HU-05 |
-| `deteccion/` | Detección de uso | HU-01 |
-| `pausas/` | Aviso de pausa y bloqueo manual | HU-03, HU-06, HU-07 |
-| `reportes/` | Resumen del día e historial | HU-01, HU-04 |
-| `data/` | Base de datos (clases del diagrama de clases) | — |
-| `ui/` | Navegación, tema y componentes comunes | — |
-
 ## Instalación en un teléfono Android
 
 La aplicación se instala en el teléfono del niño o niña, que debe tener Android 8 o superior.
@@ -70,13 +59,3 @@ Para revisar o modificar el código:
 2. Esperar a que termine "Gradle sync".
 3. Conectar un teléfono Android con la depuración USB activada, o crear un emulador, y pulsar ▶ Run.
 
-## Pruebas
-
-El proyecto tiene 34 pruebas unitarias. Se ejecutan con clic derecho sobre `app/src/test` → Run Tests, o con:
-
-```
-gradlew testDebugUnitTest
-```
-
-Los resultados de las pruebas unitarias y de sistema están en la sección 6.3 del
-[documento del proyecto](docs/Proyecto%20Integrador.pdf).
