@@ -9,10 +9,7 @@ import androidx.work.WorkerParameters
 import com.proyectointegrador.monitoreo.MonitoreoApp
 import java.util.concurrent.TimeUnit
 
-/**
- * Tarea en segundo plano que Android ejecuta cada 15 minutos (RF-02, RF-17),
- * aunque la app esté cerrada o el teléfono se haya reiniciado.
- */
+/** Tarea que Android ejecuta cada 15 minutos, aunque la app esté cerrada */
 class TrabajoActualizacionUso(
     context: Context,
     parametros: WorkerParameters,
@@ -28,7 +25,7 @@ class TrabajoActualizacionUso(
         private const val NOMBRE = "actualizacion_uso"
         const val INTERVALO_MINUTOS = 15L
 
-        /** Programa la tarea. Si ya estaba programada no la duplica. */
+        /** Si ya estaba programada no la duplica */
         fun programar(context: Context) {
             val solicitud = PeriodicWorkRequestBuilder<TrabajoActualizacionUso>(
                 INTERVALO_MINUTOS,

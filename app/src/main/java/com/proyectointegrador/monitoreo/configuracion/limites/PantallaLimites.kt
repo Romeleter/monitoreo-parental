@@ -53,7 +53,7 @@ import com.proyectointegrador.monitoreo.ui.componentes.IconoApp
 import com.proyectointegrador.monitoreo.ui.componentes.TarjetaBlanca
 import com.proyectointegrador.monitoreo.ui.theme.Marca
 
-/** Pantalla 4 — Límites de tiempo (HU-02 / CU-03). */
+/** Pantalla de límites */
 @Composable
 fun PantallaLimites(
     onAtras: () -> Unit,
@@ -73,7 +73,7 @@ fun PantallaLimites(
                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             }
         },
-        // El botón de guardar queda fijo abajo para no tener que bajar hasta el final.
+        // El botón de guardar queda fijo abajo para no tener que bajar hasta el final
         bottomBar = {
             Box(
                 Modifier
@@ -130,7 +130,7 @@ private fun Instrucciones() {
     }
 }
 
-/** Tarjeta de una app: ícono, minutos al día, botones − y + e interruptor de monitoreo (RF-22). */
+/** Tarjeta de una app: minutos al día, botones − y + e interruptor de monitoreo */
 @Composable
 fun TarjetaLimite(
     limite: LimiteEditable,

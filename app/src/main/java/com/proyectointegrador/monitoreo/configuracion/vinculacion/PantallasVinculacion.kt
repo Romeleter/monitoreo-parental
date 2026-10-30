@@ -89,7 +89,7 @@ import com.proyectointegrador.monitoreo.ui.theme.Marca
 
 private val EDADES = 5..12
 
-/** Los cuatro pasos de la vinculación (HU-05 / CU-01). */
+/** Los cuatro pasos del registro */
 private val PASOS = listOf(
     Paso("Datos", Icons.Outlined.Person),
     Paso("Permisos", Icons.Outlined.Shield),
@@ -97,7 +97,7 @@ private val PASOS = listOf(
     Paso("Éxito", Icons.Outlined.CheckCircle),
 )
 
-/** Estructura común de las pantallas de vinculación: encabezado con pasos y contenido desplazable. */
+/** Estructura común de las pantallas del registro */
 @Composable
 private fun PlantillaPaso(paso: Int, contenido: @Composable ColumnScope.() -> Unit) {
     Scaffold(topBar = { EncabezadoVinculacion(PASOS, paso) }) { padding ->
@@ -147,7 +147,7 @@ private fun coloresCampo(): TextFieldColors = OutlinedTextFieldDefaults.colors(
 
 private val FormaCampo = RoundedCornerShape(12.dp)
 
-/** Paso 1 — Datos del niño o niña (RF-10) y PIN del modo padre. */
+/** Paso 1: datos del niño o niña y PIN */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PantallaDatosMenor(vm: VinculacionViewModel, onContinuar: () -> Unit) {
@@ -256,7 +256,7 @@ fun CampoPin(valor: String, onCambio: (String) -> Unit, etiqueta: String, error:
     )
 }
 
-/** Paso 3 — Límites de tiempo iniciales (HU-02 / CU-03). Solo aparece la primera vez. */
+/** Paso 3: límites iniciales */
 @Composable
 fun PantallaLimitesIniciales(vm: VinculacionViewModel, onContinuar: () -> Unit) {
     val limites by vm.limites.collectAsStateWithLifecycle()
@@ -273,7 +273,7 @@ fun PantallaLimitesIniciales(vm: VinculacionViewModel, onContinuar: () -> Unit) 
         limites.forEach { limite ->
             TarjetaLimite(
                 limite = limite,
-                // Un campo vacío solo se marca en rojo después de pulsar "Continuar".
+                // Un campo vacío solo se marca en rojo después de pulsar "Continuar"
                 mostrarError = mostrarErrores || limite.texto.isNotEmpty(),
                 onTexto = { vm.cambiarTextoLimite(limite.paquete, it) },
                 onSumar = { vm.sumarLimite(limite.paquete, it) },
@@ -286,7 +286,7 @@ fun PantallaLimitesIniciales(vm: VinculacionViewModel, onContinuar: () -> Unit) 
 
 private enum class Permiso { USO, SUPERPOSICION }
 
-/** Datos que cambian según el permiso: nombre en Ajustes, para qué sirve y qué interruptor activar. */
+/** Lo que cambia según el permiso: nombre en Ajustes, para qué sirve y qué interruptor activar */
 private data class InfoPermiso(
     val nombre: String,
     val paraQue: String,
@@ -309,20 +309,20 @@ private val INFO_PERMISO = mapOf(
     ),
 )
 
-/** Paso 2 — Permisos (2a) y permiso no concedido (2b). RF-11, RF-19. */
+/** Paso 2: permisos */
 @Composable
 fun PantallaPermiso(onConcedido: () -> Unit) {
     val context = LocalContext.current
     var usoConcedido by remember { mutableStateOf(PermisoUso.estaConcedido(context)) }
     var superposicionConcedida by remember { mutableStateOf(PermisoSuperposicion.estaConcedido(context)) }
 
-    // Permiso cuyos ajustes se abrieron y aún no se ha vuelto a la app.
+    // Permiso cuyos ajustes se abrieron y del que aún no se ha vuelto
     var ajustesAbiertos by rememberSaveable { mutableStateOf<Permiso?>(null) }
-    // Se vuelven true si el padre regresó de los ajustes sin activar ese permiso (estado 2b).
+    // True si el padre volvió de los ajustes sin activar ese permiso
     var fallidoUso by rememberSaveable { mutableStateOf(false) }
     var fallidoSuperposicion by rememberSaveable { mutableStateOf(false) }
 
-    // Cada vez que el padre vuelve a la app (desde los ajustes), se verifican los permisos.
+    // Cada vez que el padre vuelve a la app se revisan los permisos
     LifecycleResumeEffect(Unit) {
         usoConcedido = PermisoUso.estaConcedido(context)
         superposicionConcedida = PermisoSuperposicion.estaConcedido(context)
@@ -336,7 +336,7 @@ fun PantallaPermiso(onConcedido: () -> Unit) {
         onPauseOrDispose { }
     }
 
-    // Se guía un permiso a la vez: primero el de uso y luego el de mostrar encima.
+    // Un permiso a la vez: primero el de uso y luego el de mostrar encima
     val pendiente = when {
         !usoConcedido -> Permiso.USO
         !superposicionConcedida -> Permiso.SUPERPOSICION
@@ -365,7 +365,7 @@ fun PantallaPermiso(onConcedido: () -> Unit) {
     }
 }
 
-/** Estado 2a: lista de permisos con la guía paso a paso del que falta. */
+/** Lista de permisos con la guía del que falta */
 @Composable
 private fun ColumnScope.ContenidoPermisos(
     usoConcedido: Boolean,
@@ -433,7 +433,7 @@ private fun NumeroEnCirculo(numero: Int) {
     }
 }
 
-/** Línea de tiempo con los tres pasos a seguir en los ajustes de Android. */
+/** Los tres pasos a seguir en los ajustes de Android */
 @Composable
 private fun GuiaPasos(info: InfoPermiso) {
     val pasos = listOf(
@@ -484,7 +484,7 @@ private fun PasoGuia(numero: Int, icono: ImageVector, titulo: String, texto: Str
     }
 }
 
-/** Estado 2b: el padre volvió de los ajustes sin activar el permiso. */
+/** El padre volvió de los ajustes sin activar el permiso */
 @Composable
 private fun ColumnScope.ContenidoPermisoDenegado(info: InfoPermiso, abrirAjustes: () -> Unit) {
     PanelIlustracion(R.drawable.ilus_error, fondo = MaterialTheme.colorScheme.errorContainer)
@@ -502,7 +502,7 @@ private fun ColumnScope.ContenidoPermisoDenegado(info: InfoPermiso, abrirAjustes
     BotonPrincipal("Intentar de nuevo", onClick = abrirAjustes, icono = Icons.Outlined.Refresh)
 }
 
-/** Paso 4 — Vinculación exitosa (RF-12). */
+/** Paso 4: registro exitoso */
 @Composable
 fun PantallaVinculacionExitosa(nombre: String, onIrAlPanel: () -> Unit) {
     PlantillaPaso(paso = 3) {

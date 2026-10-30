@@ -12,8 +12,8 @@ import android.os.Process
 import android.provider.Settings
 
 /**
- * Permiso "Acceso a datos de uso" que necesita UsageStatsManager (RF-11, RF-19).
- * No se puede pedir con un diálogo normal: el padre debe activarlo en los ajustes de Android.
+ * Permiso "Acceso a datos de uso". No se puede pedir con un diálogo normal:
+ * el padre debe activarlo en los ajustes de Android.
  */
 object PermisoUso {
 
@@ -41,14 +41,14 @@ object PermisoUso {
         }
     }
 
-    /** Abre la pantalla de ajustes donde se concede el permiso. */
+    /** Abre los ajustes donde se concede el permiso */
     fun abrirAjustes(context: Context) {
         val directo = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
             .setData(Uri.parse("package:${context.packageName}"))
         try {
             context.startActivity(directo)
         } catch (_: ActivityNotFoundException) {
-            // Algunos fabricantes no aceptan ir directo a la app: se abre la lista general.
+            // Algunos fabricantes no dejan ir directo a la app: se abre la lista general
             context.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
         }
     }

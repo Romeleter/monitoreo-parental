@@ -98,12 +98,12 @@ class ResumenViewModel(
 
     val ultimaActualizacion: StateFlow<Long?> = servicio.ultimaActualizacion
 
-    /** Consulta UsageStatsManager ya, sin esperar a la tarea de cada 15 minutos. */
+    /** Mide ya, sin esperar a la tarea de cada 15 minutos */
     fun actualizar() {
         viewModelScope.launch { servicio.actualizarUso() }
     }
 
-    /** CU-04: bloquear o desbloquear una app de inmediato desde el modo padre. */
+    /** Bloquea o desbloquea una app de inmediato */
     fun cambiarBloqueo(paquete: String, bloqueada: Boolean) {
         viewModelScope.launch { gestorLimites.cambiarBloqueoManual(paquete, bloqueada) }
     }
@@ -118,7 +118,7 @@ class ResumenViewModel(
     }
 }
 
-/** Pantalla 5 — Resumen de hoy: con actividad (5a) y sin actividad (5b). */
+/** Resumen de hoy */
 @Composable
 fun PantallaResumen(
     onConfigurarLimites: () -> Unit,
@@ -131,8 +131,7 @@ fun PantallaResumen(
     var hayPermisoUso by remember { mutableStateOf(true) }
     var hayPermisoSuperposicion by remember { mutableStateOf(true) }
 
-    // Al abrir la pantalla (o volver a ella) se revisan los permisos, se actualizan los datos
-    // y se asegura que la vigilancia esté corriendo.
+    // Al abrir o volver: revisa permisos, actualiza los datos y asegura que la vigilancia esté corriendo
     LifecycleResumeEffect(Unit) {
         hayPermisoUso = PermisoUso.estaConcedido(context)
         hayPermisoSuperposicion = PermisoSuperposicion.estaConcedido(context)
@@ -236,7 +235,7 @@ private fun TarjetaPerfil(perfil: String, ultimaActualizacion: Long?) {
     }
 }
 
-/** RF-19: si un permiso se retiró después de la vinculación, se guía al padre para activarlo. */
+/** Si se quitó un permiso después del registro, guía al padre para activarlo */
 @Composable
 private fun TarjetaSinPermiso(nombrePermiso: String, consecuencia: String, onAbrirAjustes: () -> Unit) {
     Surface(
@@ -268,7 +267,7 @@ private fun TarjetaSinPermiso(nombrePermiso: String, consecuencia: String, onAbr
     }
 }
 
-/** Estado 5b: todavía no hay uso registrado hoy. */
+/** Todavía no hay uso hoy */
 @Composable
 private fun EstadoSinActividad(nombre: String, onConfigurarLimites: () -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(14.dp), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -289,7 +288,7 @@ private fun EstadoSinActividad(nombre: String, onConfigurarLimites: () -> Unit) 
     }
 }
 
-/** Estado de una app con su color, ícono y texto. El texto evita depender solo del color. */
+/** Color, ícono y texto del estado de una app. El texto evita depender solo del color */
 private data class Estado(val color: Color, val icono: ImageVector, val texto: String)
 
 private fun estadoDe(uso: UsoApp): Estado = when {
@@ -346,7 +345,7 @@ private fun IconoEnCirculo(icono: ImageVector) {
     }
 }
 
-/** Pausas de hoy (RF-24), último reconocimiento del aviso (RF-16) e intentos de reapertura (RF-29). */
+/** Pausas de hoy, último "Entendido" e intentos de reapertura */
 @Composable
 private fun TarjetaPausas(pausas: Int, ultimoReconocimiento: Long?, intentos: List<Pair<AppMonitoreada, Int>>) {
     TarjetaBlanca {
@@ -400,7 +399,7 @@ private fun TarjetaPausas(pausas: Int, ultimoReconocimiento: Long?, intentos: Li
     }
 }
 
-/** HU-03 / CU-04: el padre bloquea o desbloquea una app al instante (RF-06, RF-20). */
+/** El padre bloquea o desbloquea una app al instante */
 @Composable
 private fun TarjetaBloqueoManual(apps: List<AppMonitoreada>, onCambiar: (String, Boolean) -> Unit) {
     TarjetaBlanca {

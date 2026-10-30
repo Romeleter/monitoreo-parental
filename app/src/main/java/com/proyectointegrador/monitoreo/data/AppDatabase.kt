@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
-/** Base de datos local. Todo se guarda solo en el dispositivo del menor. */
+/** Base de datos local */
 @Database(
     entities = [PerfilMenor::class, AppMonitoreada::class, RegistroUso::class, AvisoPausa::class],
     version = 3,
@@ -24,7 +24,7 @@ abstract class AppDatabase : RoomDatabase() {
                 .addMigrations(MIGRACION_1_2, MIGRACION_2_3)
                 .build()
 
-        /** Versión 2: se agrega aviso_pausa.momentoCierre. */
+        /** Versión 2: agrega aviso_pausa.momentoCierre */
         private val MIGRACION_1_2 = object : Migration(1, 2) {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL("ALTER TABLE aviso_pausa ADD COLUMN momentoCierre INTEGER")
@@ -35,7 +35,7 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
-        /** Versión 3: se agrega registro_uso.limiteMin (límite de cada día). */
+        /** Versión 3: agrega registro_uso.limiteMin */
         private val MIGRACION_2_3 = object : Migration(2, 3) {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL("ALTER TABLE registro_uso ADD COLUMN limiteMin INTEGER")

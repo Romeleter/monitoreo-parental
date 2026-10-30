@@ -27,13 +27,13 @@ data class ResumenDelDia(
     val usos: List<UsoApp>,
     val pausasHoy: Int,
     val ultimoReconocimiento: Long?,
-    /** RF-29: veces que el niño volvió a abrir cada app después del primer aviso, solo las que tienen alguna. */
+    /** Veces que el niño volvió a abrir cada app después del primer aviso */
     val intentosReapertura: List<Pair<AppMonitoreada, Int>>,
 ) {
     val hayActividad: Boolean get() = usos.any { it.minutos > 0 } || pausasHoy > 0
 }
 
-/** Prepara los datos de la pantalla "Resumen de hoy" (HU-01, pantalla 5). */
+/** Prepara los datos del resumen y del historial */
 class GeneradorReporte(private val db: AppDatabase) {
 
     fun resumenDeHoy(): Flow<ResumenDelDia> {
@@ -58,7 +58,7 @@ class GeneradorReporte(private val db: AppDatabase) {
         }
     }
 
-    /** Historial de los últimos 7 días por app (HU-04). */
+    /** Historial de los últimos 7 días por app */
     fun historialSemanal(): Flow<List<HistorialApp>> {
         val hoy = LocalDate.now()
         val fechas = CalculadoraHistorial.fechas(hoy)
@@ -71,9 +71,8 @@ class GeneradorReporte(private val db: AppDatabase) {
 
 object CalculadoraPausas {
     /**
-     * RF-29: el primer aviso del día de una app es cuando se alcanza el límite (o el niño la
-     * abre bloqueada). Cada aviso siguiente significa que volvió a abrirla, así que cuenta
-     * como un intento de reapertura. Solo devuelve las apps con al menos un intento.
+     * El primer aviso del día es cuando se alcanza el límite. Cada aviso siguiente significa
+     * que el niño volvió a abrir la app, y cuenta como un intento.
      */
     fun intentosDeReapertura(avisosDelDia: List<AvisoPausa>): Map<String, Int> =
         avisosDelDia.groupingBy { it.paquete }.eachCount()

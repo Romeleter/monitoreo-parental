@@ -6,10 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 
-/**
- * Permiso "Mostrar sobre otras apps" (SYSTEM_ALERT_WINDOW). Lo necesita el aviso de pausa
- * para aparecer encima de TikTok, Instagram o YouTube (RF-13).
- */
+/** Permiso "Mostrar sobre otras apps": lo necesita el aviso para salir encima de las apps de video */
 object PermisoSuperposicion {
 
     fun estaConcedido(context: Context): Boolean = Settings.canDrawOverlays(context)

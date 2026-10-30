@@ -1,6 +1,6 @@
 package com.proyectointegrador.monitoreo.configuracion
 
-/** Apps de video corto que se monitorean desde el inicio: nombre visible y paquete Android. */
+/** Apps de video corto que se monitorean: nombre y paquete de Android */
 object AppsPredeterminadas {
     val lista = listOf(
         "TikTok" to "com.zhiliaoapp.musically",

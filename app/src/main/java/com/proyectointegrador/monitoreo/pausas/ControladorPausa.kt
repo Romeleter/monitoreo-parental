@@ -17,11 +17,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 
-/**
- * Módulo de pausas (HU-06, HU-07, HU-03 / CU-04, CU-05).
- * Cada pocos segundos revisa qué app está en pantalla y, si debe pausarse,
- * muestra el aviso y registra la activación y el reconocimiento.
- */
+/** Revisa qué app está en pantalla y, si debe pausarse, muestra el aviso y lo registra */
 class ControladorPausa(
     private val context: Context,
     private val db: AppDatabase,
@@ -32,13 +28,13 @@ class ControladorPausa(
     private val audio = context.getSystemService(AudioManager::class.java)
     private val ventana = VentanaAviso(context)
 
-    // Pedir el foco de audio hace que TikTok, Instagram o YouTube pausen el video que suena detrás del aviso.
+    // Pedir el foco de audio hace que la app de video pause lo que suena detrás del aviso
     private val focoAudio = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN).build()
 
     private var appEnPrimerPlano: String? = null
     private var ultimaConsulta = System.currentTimeMillis() - CONSULTA_INICIAL_MS
 
-    // Uso de hoy de la app abierta: se calcula completo al abrirla y luego se suma el tiempo transcurrido.
+    // Uso de hoy de la app abierta: se calcula completo al abrirla y luego se suma lo transcurrido
     private var paqueteMedido: String? = null
     private var usoBaseMs = 0L
     private var momentoBase = 0L
@@ -47,11 +43,11 @@ class ControladorPausa(
     private var ultimoReconocimiento = 0L
 
     init {
-        // Avisos que quedaron abiertos si el servicio se detuvo antes de cerrarlos.
+        // Avisos que quedaron abiertos si el servicio se detuvo
         scope.launch { db.avisoPausaDao().cerrarPendientes() }
     }
 
-    /** Una revisión. La llama [ServicioVigilancia] cada [ServicioVigilancia.INTERVALO_MS]. */
+    /** Una revisión. La llama [ServicioVigilancia] cada 2 segundos */
     suspend fun revisar() {
         val ahora = System.currentTimeMillis()
         actualizarAppEnPrimerPlano(ahora)
@@ -60,13 +56,13 @@ class ControladorPausa(
         val motivo = app?.let { motivoDePausa(it, ahora) }
 
         if (app == null || motivo == null) {
-            // El niño salió de la app o ya no hay que pausarla: se quita el aviso sin marcarlo como reconocido.
+            // El niño salió de la app o ya no hay que pausarla: se quita el aviso sin marcarlo como reconocido
             cerrarAviso(ahora)
             if (app == null) paqueteMedido = null
             return
         }
         if (ventana.visible) return
-        // Pequeño margen tras pulsar "Entendido" para que Android termine de ir a la pantalla de inicio.
+        // Margen tras tocar "Entendido" para que Android alcance a ir al inicio
         if (ahora - ultimoReconocimiento < MARGEN_TRAS_RECONOCER_MS) return
 
         mostrarAviso(app, motivo, ahora)
@@ -115,7 +111,7 @@ class ControladorPausa(
         }
     }
 
-    /** Quita el aviso (si está visible) y guarda cuándo dejó de verse. */
+    /** Quita el aviso y guarda cuándo dejó de verse */
     private suspend fun cerrarAviso(ahora: Long) {
         if (avisoActualId == null && !ventana.visible) return
         avisoActualId?.let { db.avisoPausaDao().marcarCerrado(it, ahora) }
@@ -134,7 +130,7 @@ class ControladorPausa(
         withContext(Dispatchers.Main) { irAPantallaDeInicio() }
     }
 
-    /** Tras el aviso se cierra la app de video llevando al niño a la pantalla de inicio. */
+    /** Lleva al niño a la pantalla de inicio */
     private fun irAPantallaDeInicio() {
         val inicio = Intent(Intent.ACTION_MAIN)
             .addCategory(Intent.CATEGORY_HOME)
@@ -142,22 +138,20 @@ class ControladorPausa(
         try {
             context.startActivity(inicio)
         } catch (e: Exception) {
-            // Si Android no lo permite, el aviso volverá a salir mientras la app siga abierta.
+            // Si Android no lo permite, el aviso vuelve a salir mientras la app siga abierta
             Log.w(TAG, "No se pudo ir a la pantalla de inicio", e)
         }
     }
 
-    /** Lee los eventos nuevos desde la última consulta para saber qué app está en pantalla. */
+    /** Lee los eventos nuevos para saber qué app está en pantalla */
     private suspend fun actualizarAppEnPrimerPlano(ahora: Long) = withContext(Dispatchers.IO) {
-        // Se repasan unos segundos de más por si Android registró algún evento con retraso.
+        // Se repasan unos segundos de más por si Android registró algo con retraso
         val eventos = usageStats.queryEvents(ultimaConsulta - SOLAPE_MS, ahora)
         val evento = UsageEvents.Event()
         while (eventos.hasNextEvent()) {
             eventos.getNextEvent(evento)
-            // Solo se mira qué app pasa al frente. Las pausas se ignoran: al cambiar de pantalla
-            // dentro de una misma app, Android pausa una y abre la otra, y el aviso parpadeaba.
-            // Los diálogos de permisos o de cuentas de Google salen encima de la app, así que
-            // tampoco cuentan como salir de ella.
+            // Solo se mira qué app pasa al frente. Las pausas se ignoran porque al cambiar de pantalla
+            // dentro de una app el aviso parpadeaba. Los diálogos del sistema tampoco cuentan como salir
             if (evento.eventType == EVENTO_ABIERTA && evento.packageName !in PAQUETES_DE_APOYO) {
                 appEnPrimerPlano = evento.packageName
             }
@@ -173,7 +167,7 @@ class ControladorPausa(
         private const val MARGEN_TRAS_RECONOCER_MS = 3_000L
         private const val EVENTO_ABIERTA = 1
 
-        /** Pantallas del sistema que se abren encima de otra app sin que el niño haya salido de ella. */
+        /** Pantallas del sistema que salen encima de otra app sin que el niño haya salido de ella */
         private val PAQUETES_DE_APOYO = setOf(
             "com.google.android.permissioncontroller",
             "com.android.permissioncontroller",

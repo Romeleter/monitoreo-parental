@@ -6,7 +6,7 @@ import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-/** Pruebas del PIN que protege la configuración del padre. */
+/** Pruebas del PIN */
 class PinSeguroTest {
 
     @Test
@@ -33,7 +33,7 @@ class PinSeguroTest {
         val hash = PinSeguro.hash("1234")
         assertNotEquals("1234", hash)
         assertFalse(hash.contains("1234"))
-        // SHA-256 en hexadecimal: 64 caracteres.
+        // SHA-256 en hexadecimal: 64 caracteres
         assertEquals(64, hash.length)
     }
 

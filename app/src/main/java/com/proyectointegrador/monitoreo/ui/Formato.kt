@@ -5,7 +5,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-/** RF-02: muestra minutos en formato de horas y minutos, p. ej. "1 h 05 min". */
+/** Muestra minutos como "1 h 05 min" */
 fun formatearMinutos(minutos: Int): String {
     if (minutos < 60) return "$minutos min"
     val horas = minutos / 60

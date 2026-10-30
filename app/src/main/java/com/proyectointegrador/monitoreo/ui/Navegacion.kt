@@ -26,7 +26,7 @@ import com.proyectointegrador.monitoreo.pausas.ServicioVigilancia
 import com.proyectointegrador.monitoreo.reportes.PantallaHistorial
 import com.proyectointegrador.monitoreo.reportes.PantallaResumen
 
-/** Nombres de las pantallas de la app. */
+/** Nombres de las pantallas de la app */
 object Rutas {
     const val DATOS = "datos"
     const val LIMITES_INICIALES = "limites_iniciales"
@@ -37,27 +37,24 @@ object Rutas {
     const val LIMITES = "limites"
     const val HISTORIAL = "historial"
 
-    /** Pantallas del modo padre: se bloquean con PIN al salir de la app. */
+    /** Pantallas del modo padre: se bloquean con PIN al salir de la app */
     val MODO_PADRE = setOf(RESUMEN, LIMITES, HISTORIAL)
 }
 
-/**
- * Mapa de navegación. Si el dispositivo aún no está vinculado empieza en la pantalla 1;
- * si ya lo está, pide el PIN del padre.
- */
+/** Mapa de pantallas. Sin registro empieza en los datos; con registro, en el PIN */
 @Composable
 fun NavegacionApp(yaVinculado: Boolean) {
     val nav = rememberNavController()
     val context = LocalContext.current
-    // Compartido por las tres pantallas de vinculación para no perder los datos entre pasos.
+    // Compartido por las pantallas del registro para no perder los datos entre pasos
     val vinculacion: VinculacionViewModel = viewModel(factory = VinculacionViewModel.Factory)
     val actividad = LocalActivity.current
 
-    // Si la app pasa a segundo plano estando en el modo padre, al volver se pide el PIN otra vez.
+    // Si se sale de la app estando en el modo padre, al volver se pide el PIN
     var pedirPinAlVolver by rememberSaveable { mutableStateOf(false) }
     LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
         val enModoPadre = nav.currentDestination?.route in Rutas.MODO_PADRE
-        // Girar la pantalla también detiene la actividad un instante: eso no cuenta como salir.
+        // Girar la pantalla también detiene la actividad un instante: eso no cuenta como salir
         val girando = actividad?.isChangingConfigurations == true
         if (enModoPadre && !girando && !BloqueoModoPadre.consumirSalidaPermitida()) {
             pedirPinAlVolver = true
@@ -76,8 +73,7 @@ fun NavegacionApp(yaVinculado: Boolean) {
         }
         composable(Rutas.PERMISO) {
             PantallaPermiso(
-                // La pantalla de permisos se quita de la pila: si el padre vuelve atrás desde
-                // los límites llega a sus datos, en vez de rebotar en los permisos ya concedidos.
+                // Se quita de la pila: si el padre vuelve atrás desde los límites, llega a sus datos y no a los permisos
                 onConcedido = { nav.navigate(Rutas.LIMITES_INICIALES) { popUpTo(Rutas.PERMISO) { inclusive = true } } },
             )
         }

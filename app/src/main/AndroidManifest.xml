@@ -2,19 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Necesario para que la app aparezca en Ajustes > "Acceso a datos de uso" (UsageStatsManager). -->
+    <!-- Para que la app aparezca en "Acceso a datos de uso" -->
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
-    <!-- "Mostrar sobre otras apps": para dibujar el aviso de pausa encima de la app de video. -->
+    <!-- Para dibujar el aviso encima de la app de video -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <!-- Servicio en primer plano que vigila el uso aunque la app esté cerrada. -->
+    <!-- Para vigilar el uso aunque la app esté cerrada -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
-    <!-- Para volver a iniciar la vigilancia cuando se enciende el teléfono. -->
+    <!-- Para iniciar la vigilancia al encender el teléfono -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
-    <!-- Para mostrar el ícono real de las apps monitoreadas si están instaladas. -->
+    <!-- Para mostrar el ícono real de las apps -->
     <queries>
         <package android:name="com.zhiliaoapp.musically" />
         <package android:name="com.instagram.android" />

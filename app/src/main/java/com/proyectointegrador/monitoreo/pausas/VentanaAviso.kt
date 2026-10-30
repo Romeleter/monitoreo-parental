@@ -13,10 +13,7 @@ import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.proyectointegrador.monitoreo.ui.theme.TemaMonitoreo
 
-/**
- * Dibuja el aviso de pausa como una ventana a pantalla completa encima de cualquier app,
- * usando el permiso "Mostrar sobre otras apps". Debe usarse desde el hilo principal.
- */
+/** Dibuja el aviso a pantalla completa encima de cualquier app. Se usa desde el hilo principal */
 class VentanaAviso(private val context: Context) {
 
     private val windowManager = context.getSystemService(WindowManager::class.java)
@@ -57,14 +54,14 @@ class VentanaAviso(private val context: Context) {
     }
 
     companion object {
-        /** RF-15: segundos que el niño debe esperar antes de poder pulsar "Entendido" (entre 5 y 10). */
+        /** Segundos que el niño debe esperar para tocar "Entendido" */
         const val SEGUNDOS_ESPERA = 7
     }
 }
 
 /**
- * Compose necesita un "ciclo de vida" para funcionar. Las Activity lo traen de serie,
- * pero una ventana creada desde un servicio no, así que se lo damos con esta clase.
+ * Compose necesita un ciclo de vida. Las Activity lo traen, pero una ventana creada
+ * desde un servicio no, así que se lo damos con esta clase.
  */
 private class DuenoVentana : SavedStateRegistryOwner {
     private val registro = LifecycleRegistry(this)

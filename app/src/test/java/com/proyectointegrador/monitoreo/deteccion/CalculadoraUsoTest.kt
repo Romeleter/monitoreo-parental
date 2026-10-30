@@ -6,7 +6,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Test
 
-/** Pruebas del cálculo de tiempo de uso (RF-01, RF-18). Los tiempos están en minutos para leerlos fácil. */
+/** Pruebas del cálculo de uso. Los tiempos están en minutos para leerlos fácil */
 class CalculadoraUsoTest {
 
     private val tiktok = "com.zhiliaoapp.musically"
@@ -58,14 +58,14 @@ class CalculadoraUsoTest {
 
     @Test
     fun cuentaDesdeMedianocheSiLaAppVeniaAbierta() {
-        // El niño abrió TikTok a las 11:50 p. m. y lo cerró a las 12:15 a. m.: hoy cuentan 15 minutos.
+        // El niño abrió TikTok a las 11:50 p. m. y lo cerró a las 12:15 a. m.: hoy cuentan 15 minutos
         val uso = calcular(listOf(evento(tiktok, 15, CERRADA)))
         assertEquals(15, uso[tiktok])
     }
 
     @Test
     fun noCuentaElTiempoConElAvisoEncima() {
-        // YouTube abierto del minuto 0 al 30, pero el aviso estuvo encima del minuto 10 al 24.
+        // YouTube abierto del minuto 0 al 30, pero el aviso estuvo encima del minuto 10 al 24
         val uso = CalculadoraUso.milisegundosPorApp(
             listOf(evento(youtube, 0, ABIERTA), evento(youtube, 30, CERRADA)),
             monitoreadas,

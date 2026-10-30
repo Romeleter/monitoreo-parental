@@ -36,7 +36,7 @@ import com.proyectointegrador.monitoreo.ui.componentes.EncabezadoMarca
 import com.proyectointegrador.monitoreo.ui.theme.Marca
 import kotlinx.coroutines.launch
 
-/** Entrada al modo padre: pide el PIN creado durante la vinculación. */
+/** Entrada al modo padre: pide el PIN */
 @Composable
 fun PantallaPin(onCorrecto: () -> Unit) {
     val app = LocalContext.current.applicationContext as MonitoreoApp

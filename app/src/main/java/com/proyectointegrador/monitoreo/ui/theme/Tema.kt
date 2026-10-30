@@ -12,7 +12,7 @@ import androidx.compose.ui.text.font.FontWeight
 import com.proyectointegrador.monitoreo.R
 
 private val Colores = lightColorScheme(
-    // Azul oscuro, azul claro y turquesa tomados del logo oficial.
+    // Azul oscuro, azul claro y turquesa tomados del logo oficial
     primary = Color(0xFF1462A0),
     onPrimary = Color.White,
     primaryContainer = Color(0xFFD6E8F6),
@@ -39,31 +39,31 @@ private val Colores = lightColorScheme(
     onErrorContainer = Color(0xFF5F1111),
 )
 
-/** Colores de la marca que no tienen un rol directo en Material. */
+/** Colores de la marca que no tienen un rol directo en Material */
 object Marca {
-    /** Tarjetas blancas con borde suave, como en los mockups. */
+    /** Tarjetas blancas con borde suave */
     val tarjeta = Color.White
     val bordeTarjeta = Color(0xFFE0E6EE)
 
-    /** Tarjetas informativas color crema (avisos de permisos, privacidad, actualización). */
+    /** Tarjetas informativas color crema */
     val cremaFondo = Color(0xFFFFF7EC)
     val cremaBorde = Color(0xFFF8DDB6)
     val ambar = Color(0xFFD97706)
     val textoCrema = Color(0xFF5B3A0C)
 
-    /** Fondo celeste del perfil activo y de los paneles de ilustración. */
+    /** Fondo celeste del perfil activo y de los paneles de ilustración */
     val celeste = Color(0xFFEAF3FB)
     val textoSecundario = Color(0xFF5B6673)
 }
 
-/** Colores de los estados de uso en el resumen del día (pantalla 5). */
+/** Colores de los estados de uso en el resumen */
 object ColoresEstado {
     val dentro = Color(0xFF0F766E)
     val cerca = Color(0xFFC26A00)
     val alcanzado = Color(0xFFC0392B)
 }
 
-/** Nunito: letra redondeada y amable, usada solo en el aviso que ve el niño. */
+/** Nunito: letra redondeada, usada solo en el aviso que ve el niño */
 @OptIn(ExperimentalTextApi::class)
 val Nunito = FontFamily(
     Font(R.font.nunito, FontWeight.Normal, variationSettings = FontVariation.Settings(FontVariation.weight(400))),

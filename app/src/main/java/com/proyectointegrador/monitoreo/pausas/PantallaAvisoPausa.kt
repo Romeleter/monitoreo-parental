@@ -40,7 +40,7 @@ import com.proyectointegrador.monitoreo.R
 import com.proyectointegrador.monitoreo.ui.theme.Nunito
 import kotlinx.coroutines.delay
 
-/** Por qué se muestra el aviso: se llegó al límite (HU-06) o el padre bloqueó la app (HU-03). */
+/** Por qué sale el aviso: se llegó al límite o el padre bloqueó la app */
 enum class MotivoPausa { LIMITE, BLOQUEO_MANUAL }
 
 private val FondoAviso = Color(0xFFFAF8F4)
@@ -49,10 +49,7 @@ private val TextoAviso = Color(0xFF556170)
 private val BotonEsperaFondo = Color(0xFFDDE3E8)
 private val BotonEsperaTexto = Color(0xFF3F4A57)
 
-/**
- * Pantalla 6 — Aviso de pausa. Es la única pantalla que ve el niño (RF-13, RF-14, RF-15).
- * Ocupa toda la pantalla y no tiene opciones para cerrarla ni cambiar la configuración.
- */
+/** Aviso de pausa: la única pantalla que ve el niño. No tiene opciones para cerrarla ni cambiar nada */
 @Composable
 fun PantallaAvisoPausa(
     nombreApp: String,
@@ -62,7 +59,7 @@ fun PantallaAvisoPausa(
 ) {
     var restantes by remember { mutableIntStateOf(segundosEspera) }
 
-    // Cuenta regresiva: el botón se habilita solo cuando llega a cero (HU-07).
+    // Cuenta regresiva: el botón se habilita cuando llega a cero
     LaunchedEffect(Unit) {
         while (restantes > 0) {
             delay(1_000)
@@ -114,7 +111,7 @@ fun PantallaAvisoPausa(
 
 @Composable
 private fun BotonEntendido(restantes: Int, segundosEspera: Int, onEntendido: () -> Unit) {
-    // El anillo se llena de forma continua mientras pasan los segundos.
+    // El anillo se llena poco a poco mientras pasan los segundos
     val avance by animateFloatAsState(
         targetValue = 1f - restantes.toFloat() / segundosEspera,
         animationSpec = tween(durationMillis = 1_000, easing = LinearEasing),

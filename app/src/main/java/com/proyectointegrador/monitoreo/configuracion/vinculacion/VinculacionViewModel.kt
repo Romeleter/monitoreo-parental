@@ -22,13 +22,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-/** Lo que el padre escribe en la pantalla 1 (Datos del niño/a). */
+/** Lo que el padre escribe en el paso de datos */
 data class DatosMenorUi(
     val nombre: String = "",
     val edad: Int? = null,
     val pin: String = "",
     val pinConfirmacion: String = "",
-    /** Los errores solo se muestran después de pulsar "Continuar" la primera vez. */
+    /** Los errores solo se muestran después de tocar "Continuar" */
     val mostrarErrores: Boolean = false,
 ) {
     val errorNombre: String? get() = if (nombre.isBlank()) "Escriba el nombre del niño o niña" else null
@@ -40,13 +40,13 @@ data class DatosMenorUi(
         get() = listOf(errorNombre, errorEdad, errorPin, errorConfirmacion).all { it == null }
 }
 
-/** Flujo de vinculación del dispositivo (HU-05 / CU-01): datos → límites → permisos → éxito. */
+/** Registro del dispositivo: datos → permisos → límites → éxito */
 class VinculacionViewModel(private val db: AppDatabase) : ViewModel() {
 
     private val _datos = MutableStateFlow(DatosMenorUi())
     val datos = _datos.asStateFlow()
 
-    // Paso de límites (HU-02): los campos empiezan vacíos para que el padre elija cada límite.
+    // Los campos empiezan vacíos para que el padre elija cada límite
     private val _limites = MutableStateFlow(
         AppsPredeterminadas.lista.map { (nombre, paquete) ->
             LimiteEditable(paquete = paquete, nombre = nombre, texto = "", monitoreoActivo = true)
@@ -54,7 +54,7 @@ class VinculacionViewModel(private val db: AppDatabase) : ViewModel() {
     )
     val limites = _limites.asStateFlow()
 
-    /** Los errores de límites solo se muestran después de pulsar "Continuar". */
+    /** Los errores de límites solo se muestran después de tocar "Continuar" */
     private val _mostrarErroresLimites = MutableStateFlow(false)
     val mostrarErroresLimites = _mostrarErroresLimites.asStateFlow()
 
@@ -66,7 +66,7 @@ class VinculacionViewModel(private val db: AppDatabase) : ViewModel() {
     fun cambiarPinConfirmacion(valor: String) =
         _datos.update { it.copy(pinConfirmacion = soloDigitos(valor)) }
 
-    /** Devuelve true si se puede pasar al paso de límites. */
+    /** Devuelve true si se puede pasar al siguiente paso */
     fun validarDatos(): Boolean {
         _datos.update { it.copy(mostrarErrores = true) }
         return _datos.value.esValido
@@ -76,16 +76,13 @@ class VinculacionViewModel(private val db: AppDatabase) : ViewModel() {
     fun sumarLimite(paquete: String, delta: Int) = _limites.update { it.sumando(paquete, delta) }
     fun cambiarMonitoreo(paquete: String, activo: Boolean) = _limites.update { it.conMonitoreo(paquete, activo) }
 
-    /** Devuelve true si todos los límites están entre 1 y 300 y se puede terminar la vinculación. */
+    /** Devuelve true si todos los límites están entre 1 y 300 */
     fun validarLimites(): Boolean {
         _mostrarErroresLimites.value = true
         return _limites.value.todosValidos()
     }
 
-    /**
-     * Guarda el perfil y las apps monitoreadas al confirmar los límites, el último paso
-     * antes del éxito. Para entonces los permisos ya fueron concedidos.
-     */
+    /** Guarda el perfil y las apps. Es el último paso, así que los permisos ya están concedidos */
     fun vincular(alTerminar: () -> Unit) {
         if (vinculando) return
         vinculando = true

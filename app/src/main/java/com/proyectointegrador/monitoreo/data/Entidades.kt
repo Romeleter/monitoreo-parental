@@ -5,23 +5,20 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-/*
- * Clases de datos del diagrama de clases (sección 5.6 del documento).
- * Cada una es una tabla de la base de datos local (Room / SQLite).
- */
+// Tablas de la base de datos (diagrama de clases, sección 5.6 del documento)
 
-/** Perfil del menor que se monitorea (RF-10). */
+/** Perfil del niño o niña */
 @Entity(tableName = "perfil_menor")
 data class PerfilMenor(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val nombre: String,
     val edad: Int,
-    /** PIN del padre guardado como hash, nunca en texto plano. Protege el modo padre. */
+    /** Hash del PIN del padre, nunca el PIN en sí */
     val pinPadreHash: String,
     val fechaVinculacion: Long = System.currentTimeMillis(),
 )
 
-/** Aplicación de video corto monitoreada y su límite diario (RF-03, RF-05, RF-22). */
+/** App de video corto que se monitorea y su límite diario */
 @Entity(
     tableName = "app_monitoreada",
     foreignKeys = [
@@ -35,7 +32,7 @@ data class PerfilMenor(
     indices = [Index("perfilId")],
 )
 data class AppMonitoreada(
-    /** Nombre del paquete Android, p. ej. "com.zhiliaoapp.musically" para TikTok. */
+    /** Paquete de Android, por ejemplo "com.zhiliaoapp.musically" para TikTok */
     @PrimaryKey val paquete: String,
     val perfilId: Long,
     val nombre: String,
@@ -44,7 +41,7 @@ data class AppMonitoreada(
     val bloqueoManual: Boolean = false,
 )
 
-/** Minutos de uso de una app en un día (RF-01) y cuántas veces saltó el aviso (RF-24). */
+/** Minutos de uso de una app en un día y veces que salió el aviso */
 @Entity(
     tableName = "registro_uso",
     foreignKeys = [
@@ -60,18 +57,15 @@ data class AppMonitoreada(
 data class RegistroUso(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val paquete: String,
-    /** Fecha en formato ISO "aaaa-mm-dd". */
+    /** Fecha como "aaaa-mm-dd" */
     val fecha: String,
     val minutosUso: Int = 0,
     val activacionesAviso: Int = 0,
-    /**
-     * Límite que tenía la app ese día. Se guarda para que el historial semanal (RF-09)
-     * no cambie si el padre modifica el límite después. null en registros antiguos.
-     */
+    /** Límite de ese día, para que el historial no cambie si el padre lo modifica después */
     val limiteMin: Int? = null,
 )
 
-/** Cada vez que se muestra el aviso de pausa al niño (RF-13, RF-16). */
+/** Un aviso de pausa mostrado al niño */
 @Entity(
     tableName = "aviso_pausa",
     foreignKeys = [
@@ -90,12 +84,11 @@ data class AvisoPausa(
     val mensaje: String,
     val tiempoEsperaSeg: Int,
     val momentoMostrado: Long,
-    /** Momento en que el niño pulsó "Entendido"; null si aún no lo ha reconocido. */
+    /** Cuándo el niño tocó "Entendido"; null si todavía no */
     val momentoReconocimiento: Long? = null,
     /**
-     * Momento en que el aviso dejó de verse (por "Entendido" o porque el niño salió de la app).
-     * Mientras el aviso está encima, Android sigue contando la app como abierta; ese tiempo
-     * se descuenta del uso. null mientras el aviso sigue visible.
+     * Cuándo dejó de verse el aviso. Mientras está encima, Android sigue contando
+     * la app como abierta, y ese tiempo se descuenta del uso.
      */
     val momentoCierre: Long? = null,
 )

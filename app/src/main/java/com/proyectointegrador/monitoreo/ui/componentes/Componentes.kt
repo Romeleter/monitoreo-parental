@@ -59,12 +59,9 @@ import androidx.core.graphics.drawable.toBitmap
 import com.proyectointegrador.monitoreo.R
 import com.proyectointegrador.monitoreo.ui.theme.Marca
 
-/*
- * Piezas visuales compartidas por todas las pantallas, siguiendo los mockups del proyecto:
- * encabezado con la marca, indicador de pasos, botones grandes y tarjetas.
- */
+// Piezas visuales compartidas por todas las pantallas
 
-/** Encabezado con el escudo y el nombre de la app. [derecha] admite acciones o el "PASO X DE 4". */
+/** Encabezado con el escudo y el nombre de la app. [derecha] admite acciones o el "PASO X DE 4" */
 @Composable
 fun EncabezadoMarca(
     modifier: Modifier = Modifier,
@@ -74,7 +71,7 @@ fun EncabezadoMarca(
     Row(
         modifier
             .fillMaxWidth()
-            // El encabezado empieza debajo de la barra de estado (hora, batería).
+            // El encabezado empieza debajo de la barra de estado (hora, batería)
             .statusBarsPadding()
             .height(64.dp)
             .padding(start = if (onAtras != null) 4.dp else 20.dp, end = 8.dp),
@@ -103,10 +100,10 @@ fun EncabezadoMarca(
     }
 }
 
-/** Paso del indicador de la vinculación. */
+/** Paso del indicador del registro */
 data class Paso(val nombre: String, val icono: ImageVector)
 
-/** Círculos con ícono unidos por líneas (Datos — Límites — Permisos — Éxito). */
+/** Círculos con ícono unidos por líneas */
 @Composable
 fun IndicadorPasos(pasos: List<Paso>, pasoActual: Int, modifier: Modifier = Modifier) {
     val primario = MaterialTheme.colorScheme.primary
@@ -151,7 +148,7 @@ fun IndicadorPasos(pasos: List<Paso>, pasoActual: Int, modifier: Modifier = Modi
     }
 }
 
-/** Encabezado completo de la vinculación: marca, "PASO X DE N", indicador y línea divisoria. */
+/** Encabezado del registro: marca, "PASO X DE N", indicador y línea divisoria */
 @Composable
 fun EncabezadoVinculacion(pasos: List<Paso>, pasoActual: Int) {
     Column(Modifier.background(MaterialTheme.colorScheme.background)) {
@@ -170,7 +167,7 @@ fun EncabezadoVinculacion(pasos: List<Paso>, pasoActual: Int) {
     }
 }
 
-/** Botón principal grande, como "CONTINUAR >" de los mockups. */
+/** Botón principal grande */
 @Composable
 fun BotonPrincipal(
     texto: String,
@@ -201,7 +198,7 @@ fun BotonPrincipal(
     }
 }
 
-/** Botón secundario con borde, para acciones que no son la principal de la pantalla. */
+/** Botón secundario con borde */
 @Composable
 fun BotonSecundario(texto: String, onClick: () -> Unit, modifier: Modifier = Modifier, icono: ImageVector? = null) {
     OutlinedButton(
@@ -220,7 +217,7 @@ fun BotonSecundario(texto: String, onClick: () -> Unit, modifier: Modifier = Mod
     }
 }
 
-/** Tarjeta blanca con borde suave: el contenedor base de las pantallas del padre. */
+/** Tarjeta blanca con borde suave, la base de las pantallas del padre */
 @Composable
 fun TarjetaBlanca(
     modifier: Modifier = Modifier,
@@ -238,7 +235,7 @@ fun TarjetaBlanca(
     }
 }
 
-/** Tarjeta crema con ícono ámbar: información importante pero no un error. */
+/** Tarjeta crema con ícono ámbar, para información importante que no es un error */
 @Composable
 fun TarjetaCrema(icono: ImageVector, texto: AnnotatedString, modifier: Modifier = Modifier, titulo: String? = null) {
     Surface(
@@ -263,7 +260,7 @@ fun TarjetaCrema(icono: ImageVector, texto: AnnotatedString, modifier: Modifier 
 fun TarjetaCrema(icono: ImageVector, texto: String, modifier: Modifier = Modifier, titulo: String? = null) =
     TarjetaCrema(icono, AnnotatedString(texto), modifier, titulo)
 
-/** Nota gris con ícono, para indicaciones secundarias. */
+/** Nota gris con ícono */
 @Composable
 fun NotaGris(icono: ImageVector, texto: String, modifier: Modifier = Modifier) {
     Surface(
@@ -278,7 +275,7 @@ fun NotaGris(icono: ImageVector, texto: String, modifier: Modifier = Modifier) {
     }
 }
 
-/** Panel de color suave con una ilustración centrada. */
+/** Panel de color suave con una ilustración centrada */
 @Composable
 fun PanelIlustracion(@DrawableRes ilustracion: Int, modifier: Modifier = Modifier, alto: Dp = 190.dp, fondo: Color = Marca.celeste) {
     Box(
@@ -293,7 +290,7 @@ fun PanelIlustracion(@DrawableRes ilustracion: Int, modifier: Modifier = Modifie
     }
 }
 
-/** Etiqueta de un campo de formulario con un ícono pequeño, como en la pantalla de datos. */
+/** Etiqueta de un campo con un ícono pequeño */
 @Composable
 fun EtiquetaCampo(icono: ImageVector, texto: String) {
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -302,10 +299,7 @@ fun EtiquetaCampo(icono: ImageVector, texto: String) {
     }
 }
 
-/**
- * Ícono real de TikTok, Instagram o YouTube si está instalada en el teléfono.
- * Si no lo está, se dibuja un ícono genérico sobre fondo menta.
- */
+/** Ícono real de la app si está instalada; si no, uno genérico sobre fondo menta */
 @Composable
 fun IconoApp(paquete: String, modifier: Modifier = Modifier, tamano: Dp = 44.dp) {
     val context = LocalContext.current

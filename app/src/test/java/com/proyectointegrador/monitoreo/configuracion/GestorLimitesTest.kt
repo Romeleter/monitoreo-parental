@@ -4,7 +4,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
 
-/** Pruebas de la validación de límites (RF-04). */
+/** Pruebas de la validación de límites */
 class GestorLimitesTest {
 
     @Test

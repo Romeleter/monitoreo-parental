@@ -82,7 +82,7 @@ class HistorialViewModel(generador: GeneradorReporte, perfilDao: PerfilDao) : Vi
     val historial: StateFlow<List<HistorialApp>?> = generador.historialSemanal()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
-    /** Nombre del niño o niña, para la frase de resumen. */
+    /** Nombre del niño o niña, para la frase de resumen */
     val nombre: StateFlow<String?> = perfilDao.observarPerfil()
         .map { it?.nombre }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
@@ -106,10 +106,7 @@ private fun etiquetaCorta(fecha: LocalDate, hoy: LocalDate) =
 private fun etiquetaLarga(fecha: LocalDate, hoy: LocalDate) =
     if (fecha == hoy) "Hoy" else fecha.format(formatoFecha).replaceFirstChar { it.uppercase() }
 
-/**
- * Pantalla de historial semanal (HU-04). Primero la conclusión, luego el gráfico y los datos clave;
- * la lista día por día queda plegada para quien la quiera.
- */
+/** Historial semanal: primero la conclusión, luego el gráfico y los datos; el detalle por día queda plegado */
 @Composable
 fun PantallaHistorial(
     onAtras: () -> Unit,
@@ -157,7 +154,7 @@ fun PantallaHistorial(
     }
 }
 
-/** Resumen (RF-09, RF-25), gráfico (RF-08, RF-30) y datos clave (RF-23, RF-24) en una sola tarjeta. */
+/** Resumen, gráfico y datos clave en una sola tarjeta */
 @Composable
 private fun TarjetaSemana(h: HistorialApp, hoy: LocalDate, nombre: String) {
     var diaElegido by rememberSaveable(h.app.paquete) { mutableStateOf(h.dias.lastIndex) }
@@ -190,7 +187,7 @@ private fun TarjetaSemana(h: HistorialApp, hoy: LocalDate, nombre: String) {
             }
         }
 
-        // Detalle del día tocado en el gráfico.
+        // Detalle del día tocado en el gráfico
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             Text(
                 "${etiquetaLarga(dia.fecha, hoy)}: ${formatearMinutos(dia.minutos)} de ${formatearMinutos(dia.limite)}",
@@ -214,7 +211,7 @@ private fun TarjetaSemana(h: HistorialApp, hoy: LocalDate, nombre: String) {
     }
 }
 
-/** La conclusión de la semana en una frase, con ícono y texto para no depender solo del color. */
+/** La conclusión de la semana en una frase */
 @Composable
 private fun FraseResumen(h: HistorialApp, nombre: String) {
     val llego = h.diasConLimite > 0
@@ -269,7 +266,7 @@ private fun GraficoBarras(
     val medidorTexto = rememberTextMeasurer()
     val estiloEtiqueta = MaterialTheme.typography.labelSmall.copy(color = colorLimite)
 
-    // La escala llega un poco por encima del valor más alto o del límite, para que la línea siempre se vea.
+    // La escala llega un poco por encima del valor más alto o del límite, para que la línea siempre se vea
     val maximo = (dias.maxOf { maxOf(it.minutos, it.limite) } * 1.15f).coerceAtLeast(1f)
 
     Canvas(
@@ -284,7 +281,7 @@ private fun GraficoBarras(
         val anchoBarra = anchoCelda * 0.55f
         fun y(minutos: Int) = size.height - (minutos / maximo) * size.height
 
-        // Eje inferior.
+        // Eje inferior
         drawLine(colorEje, Offset(0f, size.height), Offset(size.width, size.height), strokeWidth = 1.dp.toPx())
 
         dias.forEachIndexed { i, dia ->
@@ -293,7 +290,7 @@ private fun GraficoBarras(
             val color = if (dia.llegoAlLimite) ColoresEstado.alcanzado else colorBarra
             if (dia.minutos > 0) dibujarBarra(color, x, top, anchoBarra, size.height - top)
             if (i == elegido && dia.minutos > 0) {
-                // Marco del día elegido (si no hubo uso, basta con la etiqueta en negrita).
+                // Marco del día elegido (si no hubo uso, basta con la etiqueta en negrita)
                 drawRoundRect(
                     color = colorElegido,
                     topLeft = Offset(x - 3.dp.toPx(), minOf(top, size.height - 4.dp.toPx()) - 3.dp.toPx()),
@@ -302,7 +299,7 @@ private fun GraficoBarras(
                     style = Stroke(width = 1.5.dp.toPx()),
                 )
             }
-            // Línea del límite de ese día (RF-30): punteada sobre cada columna.
+            // Línea punteada del límite de ese día
             val yLimite = y(dia.limite)
             drawLine(
                 color = colorLimite,
@@ -313,8 +310,7 @@ private fun GraficoBarras(
             )
         }
 
-        // Valor del límite de hoy escrito sobre su línea, al lado derecho (es la única escala que se necesita).
-        // Lleva fondo propio para que se lea aunque una barra alta pase por detrás.
+        // Valor del límite de hoy sobre su línea, con fondo propio para que se lea aunque una barra pase por detrás
         val limiteHoy = dias.last().limite
         val etiqueta = medidorTexto.measure("Límite: ${formatearMinutos(limiteHoy)}", estiloEtiqueta)
         val margen = 4.dp.toPx()
@@ -330,7 +326,7 @@ private fun GraficoBarras(
     }
 }
 
-/** Barra con las esquinas de arriba redondeadas y la base recta sobre el eje. */
+/** Barra con las esquinas de arriba redondeadas y la base recta sobre el eje */
 private fun DrawScope.dibujarBarra(color: Color, x: Float, top: Float, ancho: Float, alto: Float) {
     val radio = minOf(4.dp.toPx(), alto, ancho / 2)
     val path = Path().apply {
@@ -345,7 +341,7 @@ private fun DrawScope.dibujarBarra(color: Color, x: Float, top: Float, ancho: Fl
     drawPath(path, color)
 }
 
-/** Solo lo que no se explica solo: el rojo y la línea punteada. */
+/** Explica lo que no se entiende solo: el rojo y la línea punteada */
 @Composable
 private fun Leyenda() {
     Row(horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -373,7 +369,7 @@ private fun Leyenda() {
     }
 }
 
-/** Los mismos datos del gráfico en forma de lista, plegados para no recargar la pantalla. */
+/** Los mismos datos del gráfico en lista, plegados para no recargar la pantalla */
 @Composable
 private fun SeccionDiaPorDia(h: HistorialApp, hoy: LocalDate) {
     var abierta by rememberSaveable { mutableStateOf(false) }

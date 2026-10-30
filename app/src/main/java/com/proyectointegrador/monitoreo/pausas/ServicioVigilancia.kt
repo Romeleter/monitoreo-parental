@@ -25,10 +25,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
-/**
- * Servicio en primer plano que mantiene viva la vigilancia aunque la app esté cerrada.
- * Android exige que muestre una notificación permanente ("Monitoreo activo").
- */
+/** Mantiene viva la vigilancia aunque la app esté cerrada. Android exige una notificación fija */
 class ServicioVigilancia : Service() {
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
@@ -57,7 +54,7 @@ class ServicioVigilancia : Service() {
                 }
             }
         }
-        // Si Android detiene el servicio por falta de memoria, lo vuelve a iniciar.
+        // Si Android detiene el servicio por falta de memoria, lo vuelve a iniciar
         return START_STICKY
     }
 
@@ -93,10 +90,10 @@ class ServicioVigilancia : Service() {
         private const val CANAL = "monitoreo_activo"
         private const val ID_NOTIFICACION = 1
 
-        /** Cada cuánto se revisa qué app está en pantalla. */
+        /** Cada cuánto se revisa qué app está en pantalla */
         const val INTERVALO_MS = 2_000L
 
-        /** Inicia el servicio si ya se concedieron los permisos. Si ya está corriendo no pasa nada. */
+        /** Inicia el servicio si ya están los permisos. Si ya está corriendo no pasa nada */
         fun iniciar(context: Context) {
             if (!PermisoUso.estaConcedido(context) || !PermisoSuperposicion.estaConcedido(context)) return
             try {

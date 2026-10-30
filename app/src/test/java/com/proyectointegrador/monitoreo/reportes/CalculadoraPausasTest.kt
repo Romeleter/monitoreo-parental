@@ -4,7 +4,7 @@ import com.proyectointegrador.monitoreo.data.AvisoPausa
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-/** Pruebas de los intentos de reapertura (RF-29). */
+/** Pruebas de los intentos de reapertura */
 class CalculadoraPausasTest {
 
     private fun aviso(paquete: String) =

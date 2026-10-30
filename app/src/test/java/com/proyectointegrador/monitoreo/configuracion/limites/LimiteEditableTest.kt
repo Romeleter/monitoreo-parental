@@ -6,7 +6,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-/** Pruebas de la edición de límites en pantalla: campo de minutos, botones − y + e interruptor (RF-03, RF-04, RF-22). */
+/** Pruebas de la edición de límites: campo, botones − y + e interruptor */
 class LimiteEditableTest {
 
     private val limites = listOf(

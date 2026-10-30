@@ -14,10 +14,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 
-/**
- * Módulo de detección de uso (HU-01 / CU-02): consulta UsageStatsManager,
- * suma el tiempo de las apps monitoreadas y lo guarda en RegistroUso.
- */
+/** Lee el uso de Android, suma el tiempo de las apps monitoreadas y lo guarda en RegistroUso */
 class ServicioDeteccion(private val context: Context, private val db: AppDatabase) {
 
     private val preferencias = context.getSharedPreferences("deteccion", Context.MODE_PRIVATE)
@@ -26,13 +23,10 @@ class ServicioDeteccion(private val context: Context, private val db: AppDatabas
         preferencias.getLong(CLAVE_ULTIMA, 0L).takeIf { it > 0 },
     )
 
-    /** Momento de la última consulta exitosa, para mostrarlo en el panel (RF-02). */
+    /** Momento de la última consulta, para mostrarlo en el panel */
     val ultimaActualizacion: StateFlow<Long?> = _ultimaActualizacion.asStateFlow()
 
-    /**
-     * Recalcula el uso del día actual. Si la última actualización fue un día anterior,
-     * también cierra ese día para que el historial semanal quede completo.
-     */
+    /** Recalcula el uso de hoy. Si la última vez fue otro día, también cierra ese día */
     suspend fun actualizarUso() = withContext(Dispatchers.IO) {
         if (!PermisoUso.estaConcedido(context)) return@withContext
 
@@ -50,7 +44,7 @@ class ServicioDeteccion(private val context: Context, private val db: AppDatabas
         _ultimaActualizacion.value = ahora
     }
 
-    /** Milisegundos de uso de hoy para una sola app, incluida la sesión abierta ahora mismo. */
+    /** Uso de hoy de una sola app, incluida la sesión abierta ahora */
     suspend fun milisegundosHoy(paquete: String): Long = withContext(Dispatchers.IO) {
         val zona = ZoneId.systemDefault()
         val inicio = LocalDate.now(zona).atStartOfDay(zona).toInstant().toEpochMilli()
@@ -60,7 +54,7 @@ class ServicioDeteccion(private val context: Context, private val db: AppDatabas
             ?: 0L
     }
 
-    /** Intervalos en que el aviso de pausa estuvo visible; un aviso aún abierto llega hasta [fin]. */
+    /** Intervalos con el aviso visible. Un aviso aún abierto llega hasta [fin] */
     private suspend fun leerPausas(inicio: Long, fin: Long): List<IntervaloPausa> =
         db.avisoPausaDao().obtenerEntre(inicio, fin).map {
             IntervaloPausa(it.paquete, it.momentoMostrado, it.momentoCierre ?: fin)
@@ -90,7 +84,7 @@ class ServicioDeteccion(private val context: Context, private val db: AppDatabas
         }
     }
 
-    /** Lee los eventos de primer plano de Android entre [inicio] y [fin]. */
+    /** Lee los eventos de primer plano entre [inicio] y [fin] */
     private fun leerEventos(inicio: Long, fin: Long): List<EventoUso> {
         val usageStats = context.getSystemService(UsageStatsManager::class.java)
         val eventos = usageStats.queryEvents(inicio, fin)
@@ -111,8 +105,7 @@ class ServicioDeteccion(private val context: Context, private val db: AppDatabas
     companion object {
         private const val CLAVE_ULTIMA = "ultima_actualizacion"
 
-        // ACTIVITY_RESUMED / ACTIVITY_PAUSED (antes MOVE_TO_FOREGROUND / MOVE_TO_BACKGROUND).
-        // Se usan los valores numéricos porque los nombres nuevos solo existen desde Android 10.
+        // ACTIVITY_RESUMED y ACTIVITY_PAUSED. Se usan los números porque esos nombres solo existen desde Android 10
         private const val EVENTO_ABIERTA = 1
         private const val EVENTO_CERRADA = 2
     }

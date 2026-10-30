@@ -7,10 +7,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
 
-/*
- * DAO = "Data Access Object": las consultas SQL a cada tabla.
- * Las funciones que devuelven Flow se actualizan solas cuando cambian los datos.
- */
+// Consultas de cada tabla. Las que devuelven Flow se actualizan solas cuando cambian los datos
 
 @Dao
 interface PerfilDao {
@@ -50,7 +47,7 @@ interface RegistroUsoDao {
     @Query("SELECT * FROM registro_uso WHERE fecha = :fecha")
     fun observarDelDia(fecha: String): Flow<List<RegistroUso>>
 
-    /** Registros entre dos fechas ISO "aaaa-mm-dd", ambas incluidas (historial semanal). */
+    /** Registros entre dos fechas, ambas incluidas */
     @Query("SELECT * FROM registro_uso WHERE fecha BETWEEN :desde AND :hasta")
     fun observarEntre(desde: String, hasta: String): Flow<List<RegistroUso>>
 
@@ -63,7 +60,7 @@ interface RegistroUsoDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertar(registro: RegistroUso)
 
-    /** Crea el registro del día si no existe, o actualiza sus minutos y su límite si ya existe. */
+    /** Crea el registro del día o actualiza el que ya existe */
     @Transaction
     suspend fun guardarMinutos(paquete: String, fecha: String, minutos: Int, limite: Int) {
         if (actualizarMinutos(paquete, fecha, minutos, limite) == 0) {
@@ -77,7 +74,7 @@ interface RegistroUsoDao {
     )
     suspend fun incrementarActivaciones(paquete: String, fecha: String): Int
 
-    /** RF-24: suma una activación del aviso de pausa al registro del día. */
+    /** Suma un aviso al registro del día */
     @Transaction
     suspend fun sumarActivacion(paquete: String, fecha: String) {
         if (incrementarActivaciones(paquete, fecha) == 0) {
@@ -94,24 +91,21 @@ interface AvisoPausaDao {
     @Insert
     suspend fun insertar(aviso: AvisoPausa): Long
 
-    /** RF-16: guarda la fecha y hora en que el niño pulsó "Entendido". */
+    /** Guarda la hora en que el niño tocó "Entendido" */
     @Query("UPDATE aviso_pausa SET momentoReconocimiento = :momento WHERE id = :id")
     suspend fun marcarReconocido(id: Long, momento: Long)
 
     @Query("UPDATE aviso_pausa SET momentoCierre = :momento WHERE id = :id")
     suspend fun marcarCerrado(id: Long, momento: Long)
 
-    /**
-     * Si el servicio se detuvo con un aviso abierto, no se sabe cuándo desapareció:
-     * se cierra en el momento del reconocimiento o, si no hubo, en el momento en que se mostró.
-     */
+    /** Si el servicio se detuvo con un aviso abierto, lo cierra con la última hora conocida */
     @Query(
         "UPDATE aviso_pausa SET momentoCierre = COALESCE(momentoReconocimiento, momentoMostrado) " +
             "WHERE momentoCierre IS NULL",
     )
     suspend fun cerrarPendientes()
 
-    /** Avisos que estuvieron visibles en algún momento entre [desde] y [hasta]. */
+    /** Avisos que se vieron en algún momento entre [desde] y [hasta] */
     @Query(
         "SELECT * FROM aviso_pausa WHERE momentoMostrado < :hasta " +
             "AND (momentoCierre IS NULL OR momentoCierre > :desde)",

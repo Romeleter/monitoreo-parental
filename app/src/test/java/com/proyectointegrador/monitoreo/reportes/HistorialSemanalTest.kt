@@ -8,10 +8,10 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.time.LocalDate
 
-/** Pruebas del historial semanal (RF-08, RF-09, RF-23, RF-25). */
+/** Pruebas del historial semanal */
 class HistorialSemanalTest {
 
-    // Domingo 25 de octubre de 2026: la ventana va del lunes 19 al domingo 25.
+    // Domingo 25 de octubre de 2026: la ventana va del lunes 19 al domingo 25
     private val hoy = LocalDate.of(2026, 10, 25)
     private val tiktok = AppMonitoreada("tiktok", perfilId = 1, nombre = "TikTok", limiteDiarioMin = 30)
 
@@ -46,7 +46,7 @@ class HistorialSemanalTest {
 
     @Test
     fun usaElLimiteQueTeniaEseDia() {
-        // Ese día el límite era 60: 45 minutos no llegan al límite aunque hoy sea 30.
+        // Ese día el límite era 60: 45 minutos no llegan al límite aunque hoy sea 30
         val h = historial(registro(21, 45, limite = 60))
         assertFalse(h.dias[2].llegoAlLimite)
         assertEquals(60, h.dias[2].limite)
@@ -55,7 +55,7 @@ class HistorialSemanalTest {
 
     @Test
     fun separaEntreSemanaYFinDeSemana() {
-        // Lunes a viernes 10 min cada día; sábado 40 y domingo 60.
+        // Lunes a viernes 10 min cada día; sábado 40 y domingo 60
         val h = historial(
             registro(19, 10), registro(20, 10), registro(21, 10), registro(22, 10), registro(23, 10),
             registro(24, 40), registro(25, 60),

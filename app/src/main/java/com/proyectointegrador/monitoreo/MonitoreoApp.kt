@@ -7,10 +7,7 @@ import com.proyectointegrador.monitoreo.deteccion.ServicioDeteccion
 import com.proyectointegrador.monitoreo.deteccion.TrabajoActualizacionUso
 import com.proyectointegrador.monitoreo.reportes.GeneradorReporte
 
-/**
- * Punto de arranque de la app. Crea una sola vez la base de datos y las clases
- * de lógica para que todas las pantallas usen las mismas instancias.
- */
+/** Crea una sola vez la base de datos y las clases de lógica, para que todas las pantallas usen las mismas */
 class MonitoreoApp : Application() {
     val db: AppDatabase by lazy { AppDatabase.crear(this) }
     val gestorLimites: GestorLimites by lazy { GestorLimites(db.appMonitoreadaDao()) }

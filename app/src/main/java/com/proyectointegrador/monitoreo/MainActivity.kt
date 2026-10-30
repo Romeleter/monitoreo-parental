@@ -16,9 +16,9 @@ import com.proyectointegrador.monitoreo.pausas.ServicioVigilancia
 import com.proyectointegrador.monitoreo.ui.NavegacionApp
 import com.proyectointegrador.monitoreo.ui.theme.TemaMonitoreo
 
-/** Única actividad de la app: dibuja las pantallas de Compose. */
+/** La única actividad: dibuja las pantallas de Compose */
 class MainActivity : ComponentActivity() {
-    /** La pantalla de inicio se mantiene mientras se consulta si ya hay un perfil. */
+    /** La pantalla de carga sigue mientras se consulta si ya hay perfil */
     private var cargando = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             TemaMonitoreo {
-                // null mientras se consulta la base de datos para saber si ya hay un perfil.
+                // null mientras se consulta si ya hay perfil
                 val yaVinculado by produceState<Boolean?>(initialValue = null) {
                     value = app.db.perfilDao().obtenerPerfil() != null
                 }
